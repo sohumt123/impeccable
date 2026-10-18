@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Driver lab</title></head>
+<body>
+  <!-- Driver behaviors the shop does not exercise. Not linked from the shop. -->
+  <h1>Driver lab</h1>
+  <button id="del">Delete everything</button>
+  <p id="out" role="status"></p>
+  <a href="/lab.html#opened" target="_blank">Open help in a new tab</a>
+  <label for="when">Visit date</label> <input type="date" id="when">
+  <x-greeting></x-greeting>
+  <iframe title="Payment form" srcdoc="<button>Pay</button>" width="200" height="60"></iframe>
+  <div id="wide" style="min-width: 34rem; height: 20px"></div>
+  <script>
+    document.getElementById('del').addEventListener('click', () => {
+      document.getElementById('out').textContent = confirm('Delete everything? This cannot be undone.') ? 'Deleted' : 'Kept';
+    });
+    customElements.define('x-greeting', class extends HTMLElement {
+      connectedCallback() {
+        const root = this.attachShadow({ mode: 'open' });
+        root.innerHTML = '<button>Say hello</button><span></span>';
+        root.querySelector('button').addEventListener('click', () => (root.querySelector('span').textContent = 'Hello from the shadow'));
+      }
+    });
+  </script>
+</body>
+</html>

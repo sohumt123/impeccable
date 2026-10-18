@@ -7,6 +7,7 @@ export const OPT_IN_SUITES = [
   'live-e2e',
   'live-e2e-accept-cleanup',
   'new-work-e2e',
+  'usertest-e2e',
   'skill-behavior',
   'skill-workflow',
   'live-svelte-adapter-deepseek',
@@ -241,6 +242,25 @@ export const SUITES = {
         timeoutMs: 600000,
         forceExit: true,
         files: ['tests/new-work-e2e.test.mjs'],
+      },
+    ],
+  },
+  'usertest-e2e': {
+    description: 'Scripted Playwright walk of the usertest driver against the fixture shop: effects, dead clicks, keyboard-only refusal, budget, summarize.',
+    optIn: true,
+    needsPlaywright: true,
+    triggers: [
+      ...COMMON_INFRA_PATTERNS,
+      /^skill\/scripts\/usertest-driver\.mjs$/,
+      /^tests\/fixtures\/usertest\//,
+      /^tests\/usertest-driver\.test\.mjs$/,
+    ],
+    commands: [
+      {
+        runner: 'node',
+        timeoutMs: 300000,
+        forceExit: true,
+        files: ['tests/usertest-driver.test.mjs'],
       },
     ],
   },

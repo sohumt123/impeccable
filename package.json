@@ -57,6 +57,7 @@
     "test:live-e2e": "node scripts/run-tests.mjs live-e2e",
     "test:live-e2e-accept-cleanup": "node scripts/run-tests.mjs live-e2e-accept-cleanup",
     "test:new-work-e2e": "node scripts/run-tests.mjs new-work-e2e",
+    "test:usertest-e2e": "node scripts/run-tests.mjs usertest-e2e",
     "test:live-e2e-agent": "node scripts/run-tests.mjs live-e2e-agent",
     "test:skill-behavior": "node scripts/run-tests.mjs skill-behavior",
     "test:skill-workflow": "node scripts/run-tests.mjs skill-workflow",
