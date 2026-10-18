@@ -64,7 +64,7 @@ On a harness with no per-agent model choice, run one tier and say so in the repo
 
 ### Run matrix
 
-Default: every confirmed goal × the 2-3 personas the selection table picks × `low` and `mid`. Add Sam whenever a goal involves a form or a custom control. State the matrix, its run count, and its cost before starting. Measured on Claude Code, a run costs about $0.005 at low, $0.06 at mid, and $0.15 at high (up to $0.40), and takes 20-90 seconds; a 28-run default matrix comes to about $1. Above 32 runs, ask first.
+Default: every confirmed goal × the 2-3 personas the selection table picks × `low` and `mid`. Add Sam whenever a goal involves a form or a custom control. State the matrix, its run count, and its cost before starting. Measured on Claude Code, a run costs about $0.01 at low, $0.10 at mid, and $0.12 at high (up to $0.55), and takes 30-220 seconds; a 28-run default matrix comes to $1-2.50. Above 32 runs, ask first.
 
 For each cell, start its driver yourself, then spawn its runner:
 
