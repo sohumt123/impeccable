@@ -1,0 +1,183 @@
+{
+ "url": "http://127.0.0.1:4791/",
+ "goals": {
+  "a": {
+   "text": "Buy one Medium Field Notebook with standard shipping. You got a promo code by email: welcome10. Make up a name and address.",
+   "successText": "Order confirmed"
+  },
+  "b": {
+   "text": "Change your account email to jordan@example.com.",
+   "successText": "Signed in as jordan@example.com"
+  }
+ },
+ "cells": [
+  {
+   "goal": "a",
+   "persona": "Jordan",
+   "tier": "low",
+   "name": "a-jordan-low"
+  },
+  {
+   "goal": "a",
+   "persona": "Jordan",
+   "tier": "low",
+   "name": "a-jordan-low-n2"
+  },
+  {
+   "goal": "a",
+   "persona": "Jordan",
+   "tier": "mid",
+   "name": "a-jordan-mid"
+  },
+  {
+   "goal": "a",
+   "persona": "Jordan",
+   "tier": "mid",
+   "name": "a-jordan-mid-n2"
+  },
+  {
+   "goal": "a",
+   "persona": "Sam",
+   "tier": "low",
+   "name": "a-sam-low"
+  },
+  {
+   "goal": "a",
+   "persona": "Sam",
+   "tier": "low",
+   "name": "a-sam-low-n2"
+  },
+  {
+   "goal": "a",
+   "persona": "Sam",
+   "tier": "mid",
+   "name": "a-sam-mid"
+  },
+  {
+   "goal": "a",
+   "persona": "Sam",
+   "tier": "mid",
+   "name": "a-sam-mid-n2"
+  },
+  {
+   "goal": "a",
+   "persona": "Casey",
+   "tier": "low",
+   "name": "a-casey-low"
+  },
+  {
+   "goal": "a",
+   "persona": "Casey",
+   "tier": "low",
+   "name": "a-casey-low-n2"
+  },
+  {
+   "goal": "a",
+   "persona": "Casey",
+   "tier": "mid",
+   "name": "a-casey-mid"
+  },
+  {
+   "goal": "a",
+   "persona": "Casey",
+   "tier": "mid",
+   "name": "a-casey-mid-n2"
+  },
+  {
+   "goal": "a",
+   "persona": "Riley",
+   "tier": "low",
+   "name": "a-riley-low"
+  },
+  {
+   "goal": "a",
+   "persona": "Riley",
+   "tier": "low",
+   "name": "a-riley-low-n2"
+  },
+  {
+   "goal": "a",
+   "persona": "Riley",
+   "tier": "mid",
+   "name": "a-riley-mid"
+  },
+  {
+   "goal": "a",
+   "persona": "Riley",
+   "tier": "mid",
+   "name": "a-riley-mid-n2"
+  },
+  {
+   "goal": "b",
+   "persona": "Jordan",
+   "tier": "low",
+   "name": "b-jordan-low"
+  },
+  {
+   "goal": "b",
+   "persona": "Jordan",
+   "tier": "low",
+   "name": "b-jordan-low-n2"
+  },
+  {
+   "goal": "b",
+   "persona": "Jordan",
+   "tier": "mid",
+   "name": "b-jordan-mid"
+  },
+  {
+   "goal": "b",
+   "persona": "Jordan",
+   "tier": "mid",
+   "name": "b-jordan-mid-n2"
+  },
+  {
+   "goal": "b",
+   "persona": "Alex",
+   "tier": "low",
+   "name": "b-alex-low"
+  },
+  {
+   "goal": "b",
+   "persona": "Alex",
+   "tier": "low",
+   "name": "b-alex-low-n2"
+  },
+  {
+   "goal": "b",
+   "persona": "Alex",
+   "tier": "mid",
+   "name": "b-alex-mid"
+  },
+  {
+   "goal": "b",
+   "persona": "Alex",
+   "tier": "mid",
+   "name": "b-alex-mid-n2"
+  },
+  {
+   "goal": "b",
+   "persona": "Sam",
+   "tier": "low",
+   "name": "b-sam-low"
+  },
+  {
+   "goal": "b",
+   "persona": "Sam",
+   "tier": "low",
+   "name": "b-sam-low-n2"
+  },
+  {
+   "goal": "b",
+   "persona": "Sam",
+   "tier": "mid",
+   "name": "b-sam-mid"
+  },
+  {
+   "goal": "b",
+   "persona": "Sam",
+   "tier": "mid",
+   "name": "b-sam-mid-n2"
+  }
+ ]
+}
