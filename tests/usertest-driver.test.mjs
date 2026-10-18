@@ -251,6 +251,10 @@ describe('usertest driver', () => {
     o = await drive(dir, 'click', refFor(o, /link "Open help in a new tab"/));
     assert.match(o, /a new tab opened/);
     assert.match(o, /lab\.html#opened/);
+    // The driver waits for in-flight requests, and reports what showed while it waited.
+    o = await drive(dir, 'click', refFor(o, /button "Show times"/));
+    assert.match(o, /Open: 9:00 AM/);
+    assert.match(o, /while it loaded \([\d.]+s\), the page showed: "Nothing available"/);
     // People type dates the way they write them; the driver fills the native field.
     o = await drive(dir, 'observe');
     o = await drive(dir, 'fill', refFor(o, /textbox "Visit date"/), '10/20/2026');

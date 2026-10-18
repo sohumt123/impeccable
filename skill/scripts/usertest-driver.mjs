@@ -325,6 +325,10 @@ async function serve(runDir, opts) {
   await context.addInitScript(mutationCounter);
 
   const pending = { console: [], pageErrors: [], network: [], dialogs: [], tabs: [] };
+  // Requests the page is waiting on. Playwright's networkidle only covers the
+  // initial load, so after an action the driver tracks fetches itself.
+  const inflight = new Set();
+  const LONG_LIVED = new Set(['websocket', 'eventsource', 'media', 'manifest', 'other']);
   const state = { step: 0, actions: 0, nextRef: 1, goalMetAt: null, done: null, last: null, startedAt: Date.now(), dialogPolicy: null, dialog: null, onDialog: null, pendingRun: null };
   let page;
 
@@ -336,6 +340,9 @@ async function serve(runDir, opts) {
       pending.console.push(m.text().slice(0, 300));
     });
     p.on('pageerror', (e) => pending.pageErrors.push(String(e.message).slice(0, 300)));
+    p.on('request', (q) => { if (!LONG_LIVED.has(q.resourceType())) inflight.add(q); });
+    p.on('requestfinished', (q) => inflight.delete(q));
+    p.on('requestfailed', (q) => inflight.delete(q));
     p.on('response', (r) => { if (r.status() >= 400 && !/\/favicon\.ico$/.test(r.url())) pending.network.push(`${r.status()} ${r.request().method()} ${r.url()}`); });
     p.on('requestfailed', (r) => pending.network.push(`FAILED ${r.method()} ${r.url()} ${r.failure()?.errorText || ''}`));
     p.on('dialog', async (d) => {
@@ -376,9 +383,19 @@ async function serve(runDir, opts) {
 
   const settle = async () => {
     await page.waitForLoadState('domcontentloaded', { timeout: profile.network === 'slow' ? 30000 : 8000 }).catch(() => {});
-    await page.waitForLoadState('networkidle', { timeout: profile.network === 'slow' ? 8000 : 2500 }).catch(() => {});
-    await page.waitForTimeout(300);
+    // Quiet means no request in flight for 400ms; give up after the network's patience.
+    const deadline = Date.now() + (profile.network === 'slow' ? 15000 : 6000);
+    let quietSince = inflight.size ? null : Date.now();
+    await page.waitForTimeout(150);
+    while (Date.now() < deadline) {
+      if (inflight.size) quietSince = null;
+      else if (quietSince === null) quietSince = Date.now();
+      else if (Date.now() - quietSince >= 400) break;
+      await page.waitForTimeout(100);
+    }
+    await page.waitForTimeout(150);
   };
+  const visibleText = () => page.evaluate(() => document.body?.innerText || '').catch(() => '');
   const snapshot = async () => {
     const snap = await page.evaluate(pageSnapshot, { maxElements: MAX_ELEMENTS, mobile, keyboard, nextRef: state.nextRef, deviceWidth: device.viewport.width });
     state.nextRef = snap.nextRef;
@@ -426,7 +443,11 @@ async function serve(runDir, opts) {
         type === 'prompt' ? 'answer it: `answer ok <text>` or `answer cancel`' : 'answer it: `answer ok` or `answer cancel`'].join('\n');
     }
     state.onDialog = null;
+    // What a person would have seen while the page was still loading.
+    const early = action === 'open' ? '' : await visibleText();
+    const waitStart = Date.now();
     await settle();
+    const waited = Date.now() - waitStart;
     let snap;
     try {
       snap = await snapshot();
@@ -449,6 +470,8 @@ async function serve(runDir, opts) {
       else effect = 'none';
     }
     checkGoal(snap);
+    const finalLines = new Set(snap.bodyText.split('\n').map((l) => l.trim()));
+    const transient = waited > 700 ? [...new Set(early.split('\n').map((l) => l.trim()))].filter((l) => l.length > 2 && l.length < 160 && !finalLines.has(l)).slice(0, 3) : [];
     // A dead action: a click on a control, or Enter/Space on a focused control, that changed nothing.
     const actionable = (role) => /^(button|link|clickable|checkbox|radio|combobox|menuitem|tab|switch)/.test(role || '');
     const dead = effect === 'none' && !error && (
@@ -461,7 +484,7 @@ async function serve(runDir, opts) {
       targetRole: extra.role || null, effect, dead, error,
       url: snap.url, title: snap.title, ms: Date.now() - t0,
       console: pending.console.splice(0), pageErrors: pending.pageErrors.splice(0), network: pending.network.splice(0),
-      dialogs, tabs, warnings: extra.warnings || [], focused: snap.focused, horizontalOverflow: snap.horizontalOverflow,
+      dialogs, tabs, transient, waitedMs: waited, warnings: extra.warnings || [], focused: snap.focused, horizontalOverflow: snap.horizontalOverflow,
       goalMet: state.goalMetAt !== null, screenshot: path.basename(shot), frames: snap.frames, skipped: snap.skipped,
       contentWidth: snap.contentWidth,
       unlabeled: snap.items.filter((i) => i.flags.includes('unlabeled')).map((i) => `${i.ref} ${i.role}`),
@@ -483,6 +506,7 @@ async function serve(runDir, opts) {
     lines.push(`page: "${snap.title}" ${snap.url}`);
     lines.push(`viewport ${snap.viewport.join('x')} · scrolled ${snap.scroll[0]}/${snap.scroll[1]} · actions left: ${profile.budget - state.actions}`);
     if (entry.action === 'interrupt') lines.push('you left the tab and came back to it later');
+    if (entry.transient.length) lines.push(`while it loaded (${(entry.waitedMs / 1000).toFixed(1)}s), the page showed: ${entry.transient.map((t) => `"${t}"`).join(', ')}`);
     for (const t of entry.tabs) lines.push(`a new tab opened (${t}); you are now in it`);
     for (const d of entry.dialogs) lines.push(`a ${d.type} dialog said: "${d.message}" (${d.how === 'accept' ? (d.type === 'alert' ? 'it closed with OK' : 'you pressed OK') : 'you pressed Cancel'})`);
     for (const fr of snap.frames) lines.push(`embedded frame "${String(fr).slice(0, 80)}": its contents are not listed here; read the screenshot to see it`);
@@ -930,6 +954,7 @@ function evidence(r) {
     ...r.errors.map((e) => [e.step, `js error: ${e.msg}`]),
     ...r.network.map((e) => [e.step, `network: ${e.msg}`]),
     ...r.dialogs.map((e) => [e.step, `dialog: ${e.msg}`]),
+    ...r.steps.filter((e) => e.transient?.length).map((e) => [e.step, `shown while loading (${(e.waitedMs / 1000).toFixed(1)}s), then replaced: ${e.transient.map((t) => `"${t}"`).join(', ')}`]),
     ...r.warnings.map((e) => [e.step, e.msg]),
     ...r.pointerOnly.map((e) => [e.step, `pointer-only control on page: ${e.msg}`]),
     ...r.placeholderOnly.map((e) => [e.step, `field labeled only by placeholder: ${e.msg}`]),

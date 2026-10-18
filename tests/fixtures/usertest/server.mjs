@@ -27,6 +27,10 @@ http.createServer((req, res) => {
     });
     return;
   }
+  // Driver lab only: a slow response, for the loading-state test.
+  if (req.url === '/api/slow') {
+    return setTimeout(() => { res.writeHead(200, { 'content-type': 'application/json' }); res.end('{"times":["9:00 AM"]}'); }, 1200);
+  }
   const file = path.join(root, req.url === '/' ? 'index.html' : path.normalize(req.url.split('?')[0]));
   if (!file.startsWith(root) || !fs.existsSync(file)) {
     res.writeHead(404);

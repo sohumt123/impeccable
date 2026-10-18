@@ -8,12 +8,19 @@
   <p id="out" role="status"></p>
   <a href="/lab.html#opened" target="_blank">Open help in a new tab</a>
   <label for="when">Visit date</label> <input type="date" id="when">
+  <button id="times">Show times</button> <p id="slots"></p>
   <x-greeting></x-greeting>
   <iframe title="Payment form" srcdoc="<button>Pay</button>" width="200" height="60"></iframe>
   <div id="wide" style="min-width: 34rem; height: 20px"></div>
   <script>
     document.getElementById('del').addEventListener('click', () => {
       document.getElementById('out').textContent = confirm('Delete everything? This cannot be undone.') ? 'Deleted' : 'Kept';
+    });
+    document.getElementById('times').addEventListener('click', async () => {
+      const out = document.getElementById('slots');
+      out.textContent = 'Nothing available';
+      const { times } = await (await fetch('/api/slow')).json();
+      out.textContent = `Open: ${times.join(', ')}`;
     });
     customElements.define('x-greeting', class extends HTMLElement {
       connectedCallback() {
