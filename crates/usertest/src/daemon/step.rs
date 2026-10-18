@@ -206,6 +206,14 @@ impl Driver {
     /// went wrong, so the trace shows the hang and the budget stays spent.
     fn stalled_step(&mut self, action: &str, args: &[String], extra: &Extra, why: &str) -> String {
         self.step += 1;
+        // Stop the load that hung, as a person would press stop, so the next
+        // verb reads the page instead of waiting out the same hang.
+        let sid = self.tab.session.clone();
+        let _ = self
+            .browser
+            .post_raw(Some(&sid), "Page.stopLoading", json!({}));
+        self.inflight.clear();
+        self.dom_ready = true;
         let error = first_line(why, 240);
         let entry = json!({
             "step": self.step, "action": action, "args": args, "target": extra.target,

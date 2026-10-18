@@ -165,13 +165,15 @@ impl Driver {
             Act::Back => {
                 let h = self.call("Page.getNavigationHistory", json!({}))?;
                 let i = h.get("currentIndex").and_then(Value::as_u64).unwrap_or(0);
-                if i == 0 {
+                // The tab starts on about:blank; a visitor who arrived at the
+                // start URL has nothing to go back to.
+                let prev = i
+                    .checked_sub(1)
+                    .and_then(|p| h.pointer(&format!("/entries/{p}")).cloned());
+                let Some(prev) = prev.filter(|e| s(e, "url") != "about:blank") else {
                     return Ok(());
-                }
-                let id = h
-                    .pointer(&format!("/entries/{}/id", i - 1))
-                    .cloned()
-                    .unwrap_or(Value::Null);
+                };
+                let id = prev.get("id").cloned().unwrap_or(Value::Null);
                 self.call("Page.navigateToHistoryEntry", json!({ "entryId": id }))?;
                 self.dom_ready = false;
                 Ok(())

@@ -20,9 +20,14 @@ impl Driver {
         let start = Instant::now();
         self.wait(150)?;
         if std::mem::take(&mut self.check_ready) {
-            let state = self.eval("location.href === 'about:blank' ? '' : document.readyState")?;
-            if matches!(state.as_str(), Some("interactive" | "complete")) {
-                self.dom_ready = true;
+            // A document mid-commit or a tab already gone just means waiting
+            // for the load events as usual.
+            match self.eval("location.href === 'about:blank' ? '' : document.readyState") {
+                Ok(state) if matches!(state.as_str(), Some("interactive" | "complete")) => {
+                    self.dom_ready = true
+                }
+                Err(Fail::Dialog) => return Err(Fail::Dialog),
+                _ => {}
             }
         }
         let dom_deadline = Instant::now() + dom_timeout;

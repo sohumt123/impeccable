@@ -429,6 +429,10 @@ impl Driver {
         if self.verb_deadline.is_some_and(|d| Instant::now() >= d) {
             return Err(Fail::Msg(STALLED.into()));
         }
+        // A stop signal ends the verb in flight; the serve loop then shuts down.
+        if serve::interrupted() {
+            return Err(Fail::Msg("the run was stopped".into()));
+        }
         loop {
             match self.browser.next_message(deadline) {
                 Ok(Some(m)) => self.handle(m),

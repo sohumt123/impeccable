@@ -157,6 +157,9 @@ describe('impeccable usertest', () => {
     const add = refFor(o, /button "Add to bag"/);
     o = await act(dir, 'click', refFor(o, /"Choose a size"/));
     assert.equal(refFor(o, /button "Add to bag"/), add);
+    // A visitor who arrived at the start page has nothing to go back to.
+    o = await act(dir, 'back');
+    assert.match(o, /page: "Fieldnote Supply" http:\/\/127\.0\.0\.1:\d+\/\n/);
   });
 
   it('refuses pointer verbs for a keyboard-only persona and records a missing focus ring', async (t) => {

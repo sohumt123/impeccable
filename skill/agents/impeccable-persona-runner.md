@@ -24,7 +24,7 @@ Expect: the persona (name, profile, behaviors, and one line on how they drive); 
 
 Run exactly one driver call per shell command, written out in full: `<driver command> <verb> ... --run <run dir>`. No shell variables, no `;` or `&&` chains, no pipes, no loops. Permissions allow only that shape, and you need to see each observation before the next action anyway.
 
-Every verb takes `--run <run dir>`. Each action prints a fresh observation: what your action did (`navigated`, `changed`, `focus moved`, or `none`), anything that popped up, and the page's elements in reading order with refs like `e12`. Refs never repeat within a run; use the ones from the latest observation. An element marked `*` is not on your screen: scroll before you act on it, the way you would look for it (`scroll down`, `scroll right`, or `scroll <ref>` once you know where it is).
+Every verb takes `--run <run dir>`. Each action prints a fresh observation: what your action did (`navigated`, `changed`, `focus moved`, `none`, or `unknown` when the page stopped responding), anything that popped up, and the page's elements in reading order with refs like `e12`. Refs never repeat within a run; use the ones from the latest observation. An element marked `*` is not on your screen: scroll before you act on it, the way you would look for it (`scroll down`, `scroll right`, or `scroll <ref>` once you know where it is).
 
 - `click <ref>` (a tap on a phone), `fill <ref> <text>`, `select <ref> <option label>`
 - `press <key>` (Tab, Shift+Tab, Enter, Space, Escape, ArrowDown...), `type <text>` into the focused element

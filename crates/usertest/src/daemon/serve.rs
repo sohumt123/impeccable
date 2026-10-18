@@ -23,6 +23,10 @@ pub fn catch_signals() {
     impeccable_common::proc::on_interrupt(&INTERRUPTED);
 }
 
+pub(super) fn interrupted() -> bool {
+    INTERRUPTED.load(Ordering::SeqCst)
+}
+
 /// What `start` is waiting for: the first observation (`code` 0), or why the
 /// run could not begin (`USERTEST_*` exit codes, see lib.rs).
 pub fn write_first(run_dir: &Path, code: i32, text: &str) {
