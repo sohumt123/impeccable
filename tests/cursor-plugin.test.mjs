@@ -98,7 +98,7 @@ describe('Cursor native plugin', () => {
     const dist = path.join(root, 'real-provider');
     createTransformer(PROVIDERS.cursor)(skills, dist, { skillsVersion: version });
     const output = stageCursorPlugin(repository, dist);
-    assert.equal(fs.readdirSync(path.join(output, 'agents')).length, 4);
+    assert.equal(fs.readdirSync(path.join(output, 'agents')).length, 5);
     let links = 0;
     for (const rel of fs.readdirSync(output, { recursive: true }).filter(file => file.endsWith('.md'))) {
       const filename = path.join(output, rel);

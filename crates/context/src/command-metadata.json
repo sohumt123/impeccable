@@ -51,6 +51,10 @@
     "description": "Evaluate design from a UX perspective, assessing visual hierarchy, information architecture, emotional resonance, cognitive load, and overall quality with quantitative scoring, persona-based testing, automated anti-pattern detection, and actionable feedback. Use when the user asks to review, critique, evaluate, or give feedback on a design or component.",
     "argumentHint": "[area (feature, page, component...)]"
   },
+  "usertest": {
+    "description": "Send persona agents into the running app to complete real goals at more than one model tier, through a browser driver that enforces each persona's constraints (keyboard-only, mobile, slow network) and records every step. Reports verified pass or fail per persona and tier, dead clicks, JS and network errors, false success, and ranked pain points with screenshots. Use when the user wants usability testing, user journey or flow testing, task-completion checks, or to find where real users would get stuck.",
+    "argumentHint": "[target url or route] [goals...]"
+  },
   "delight": {
     "description": "Add moments of joy, personality, and unexpected touches that make interfaces memorable and enjoyable to use. Elevates functional to delightful. Use when the user asks to add polish, personality, animations, micro-interactions, delight, or make an interface feel fun or memorable.",
     "argumentHint": "[target]"

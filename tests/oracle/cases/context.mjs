@@ -431,6 +431,7 @@ const cases = [
   { id: 'pin-live-from-subdir', verb: 'pin', workspace: 'ctx-pin', cwd: 'sub/deeper', setup: (ws) => fs.mkdirSync(path.join(ws, 'sub/deeper'), { recursive: true }), args: ['pin', 'live'], env: env(), files: ['.*/skills/**'] },
   { id: 'pin-unpin-nothing-pinned', verb: 'pin', workspace: 'ctx-pin', args: ['unpin', 'polish'], env: env(), files: ['.*/skills/**'] },
   { id: 'pin-unpin-skips-non-pinned', verb: 'pin', workspace: 'ctx-pin', args: ['unpin', 'audit'], env: env(), files: ['.*/skills/**'] },
+  { id: 'pin-usertest', verb: 'pin', workspace: 'ctx-pin', args: ['pin', 'usertest'], env: env(), files: ['.*/skills/**'] },
   { id: 'pin-then-unpin', verb: 'pin', workspace: 'ctx-pin', env: env(), files: ['.*/skills/**'], steps: [{ args: ['pin', 'critique'] }, { args: ['pin', 'critique'] }, { args: ['unpin', 'critique'] }, { args: ['unpin', 'critique'] }] },
   { id: 'pin-i-impeccable-alias', verb: 'pin', workspace: 'ctx-empty', setup: (ws) => write(ws, '.codex/skills/i-impeccable/SKILL.md', '---\nname: i-impeccable\n---\n'), args: ['pin', 'shape'], env: env(), files: ['.*/skills/**'] },
   // #483: OpenCode does not surface a pinned SKILL.md in its slash menu, so a

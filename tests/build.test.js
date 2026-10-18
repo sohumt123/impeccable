@@ -408,6 +408,8 @@ describe('skill scripts payload', () => {
       'lib/image-metrics.mjs',
       'lib/png.mjs',
       'lib/raster.mjs',
+      // The usertest browser driver: a Playwright daemon per persona run.
+      'usertest-driver.mjs',
     ]);
     const stray = [...names].filter((n) =>
       (n.endsWith('.mjs') || n.startsWith('detector/') || n.startsWith('lib/')) && !allowedNodeScripts.has(n));
@@ -457,6 +459,7 @@ describe('degraded-mode fallback reference generation', () => {
       'documenter.md',
       'finish-reviewer.md',
       'manual-edit-applier.md',
+      'persona-runner.md',
     ]);
   });
 
@@ -530,6 +533,7 @@ describe('GitHub Copilot custom agent generation', () => {
       'impeccable-documenter.agent.md',
       'impeccable-finish-reviewer.agent.md',
       'impeccable-manual-edit-applier.agent.md',
+      'impeccable-persona-runner.agent.md',
     ]);
   });
 
@@ -573,6 +577,7 @@ describe('GitHub Copilot custom agent generation', () => {
       'documenter.md',
       'finish-reviewer.md',
       'manual-edit-applier.md',
+      'persona-runner.md',
     ]);
   });
 });
@@ -601,10 +606,11 @@ describe('Cursor subagent generation', () => {
       'impeccable-documenter.md',
       'impeccable-finish-reviewer.md',
       'impeccable-manual-edit-applier.md',
+      'impeccable-persona-runner.md',
     ]);
   });
 
-  test('frontmatter maps name, description, model inherit, is_background false; readonly only on the reviewer', () => {
+  test('frontmatter maps name, description, model inherit, is_background false; readonly only on the read-only roles', () => {
     for (const name of fs.readdirSync(AGENTS_DIR)) {
       const content = fs.readFileSync(path.join(AGENTS_DIR, name), 'utf-8');
       const frontmatter = content.split('---')[1];
@@ -617,9 +623,9 @@ describe('Cursor subagent generation', () => {
       expect(frontmatter).not.toContain('tools:');
       expect(frontmatter).not.toContain('effort:');
       expect(frontmatter).not.toContain('maxTurns:');
-      // The finish reviewer is the only role whose tool list has no Write or
-      // Edit; it reviews, the other three write.
-      if (name === 'impeccable-finish-reviewer.md') {
+      // The finish reviewer and the persona runner are the roles whose tool
+      // lists have no Write or Edit; the runner's files come from the driver.
+      if (['impeccable-finish-reviewer.md', 'impeccable-persona-runner.md'].includes(name)) {
         expect(frontmatter).toContain('readonly: true');
       } else {
         expect(frontmatter).not.toContain('readonly:');

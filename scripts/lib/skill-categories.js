@@ -14,6 +14,7 @@ export const SKILL_CATEGORIES = {
   // EVALUATE - review and assess
   critique: 'evaluate',
   audit: 'evaluate',
+  usertest: 'evaluate',
   // REFINE - improve existing design
   typeset: 'refine',
   layout: 'refine',
