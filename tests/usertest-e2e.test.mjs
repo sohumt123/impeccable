@@ -101,6 +101,9 @@ describe('impeccable usertest', () => {
     o = await drive(dir, 'fill', refFor(o, /textbox "Address"/), '1 Main St');
     o = await drive(dir, 'click', refFor(o, /radio "Std/));
 
+    // Place order is below the fold: a visitor scrolls to it before clicking.
+    assert.match(await drive(dir, 'click', place), /not on your screen \(it is below what you can see\); scroll to it first/);
+    o = await drive(dir, 'scroll', place);
     // Planted P3: Place order before the terms box does nothing.
     o = await drive(dir, 'click', place);
     assert.match(o, /effect: none/);
@@ -233,6 +236,8 @@ describe('impeccable usertest', () => {
     // Open shadow DOM is listed and actionable.
     o = await drive(dir, 'click', refFor(o, /button "Say hello"/));
     assert.match(o, /Hello from the shadow/);
+    // A change inside a shadow root is still a change, not a dead click.
+    assert.match(o, /effect: changed/);
     // A confirm pauses the run; the runner reads it and chooses.
     const del = refFor(o, /button "Delete everything"/);
     o = await drive(dir, 'click', del);

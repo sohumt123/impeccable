@@ -48,6 +48,20 @@ function utDescribe(el) {
   return `${ref ? `[${ref}] ` : ''}${el.tagName.toLowerCase()}${text ? ` "${text}"` : ''}`;
 }
 
+// A person acts only on what the screen shows. Entirely outside the visible
+// screen (the `*` in the element list) means they have to scroll to it first.
+function utOffScreen(el, ref) {
+  const r = el.getBoundingClientRect();
+  const vv = window.visualViewport;
+  const l = vv ? vv.offsetLeft : 0;
+  const t = vv ? vv.offsetTop : 0;
+  const w = vv ? vv.width : innerWidth;
+  const h = vv ? vv.height : innerHeight;
+  if (r.bottom > t && r.top < t + h && r.right > l && r.left < l + w) return null;
+  const where = r.top >= t + h ? 'below' : r.bottom <= t ? 'above' : r.left >= l + w ? 'to the right of' : 'to the left of';
+  return { error: `${ref} is not on your screen (it is ${where} what you can see); scroll to it first` };
+}
+
 // Where a pointer would land on ref, after scrolling it into view the way
 // Playwright's actionability checks do. Returns viewport coordinates for
 // Input.dispatch*Event, or the reason a person could not hit it.
@@ -55,6 +69,8 @@ function utPoint(ref) {
   const el = utFind(ref);
   if (!el || !el.isConnected) return { error: `${ref} is no longer on the page; observe again` };
   if (el.disabled || el.getAttribute('aria-disabled') === 'true') return { error: `${ref} is disabled; clicking it does nothing` };
+  const away = utOffScreen(el, ref);
+  if (away) return away;
   const vv = window.visualViewport;
   const seen = () => (vv ? { l: vv.offsetLeft, t: vv.offsetTop, r: vv.offsetLeft + vv.width, b: vv.offsetTop + vv.height } : { l: 0, t: 0, r: innerWidth, b: innerHeight });
   let r = el.getBoundingClientRect();
@@ -92,7 +108,8 @@ function utFillPrep(ref, text) {
   if (tag === 'INPUT' && ['checkbox', 'radio', 'submit', 'button', 'reset', 'image', 'file'].includes(type)) return { error: `${ref} is a ${type}, not a text field; click it instead` };
   if (tag !== 'INPUT' && tag !== 'TEXTAREA' && !el.isContentEditable) return { error: `${ref} is not a text field` };
   if (el.readOnly) return { error: `${ref} is read-only` };
-  el.scrollIntoView({ block: 'center', inline: 'center', behavior: 'instant' });
+  const away = utOffScreen(el, ref);
+  if (away) return away;
   el.focus();
   if (['date', 'time', 'datetime-local', 'month', 'week', 'color', 'range'].includes(type)) {
     let value = text;
@@ -128,6 +145,8 @@ function utSelect(ref, label) {
   if (!el || !el.isConnected) return { error: `${ref} is no longer on the page; observe again` };
   if (el.tagName !== 'SELECT') return { error: `${ref} is not a dropdown list; click it instead` };
   if (el.disabled) return { error: `${ref} is disabled` };
+  const away = utOffScreen(el, ref);
+  if (away) return away;
   const want = label.trim();
   const opts = [...el.options];
   const o = opts.find((x) => x.label.trim() === want || x.text.trim() === want) || opts.find((x) => x.value === want);
@@ -296,6 +315,11 @@ function pageSnapshot({ maxElements, mobile, keyboard, nextRef, deviceWidth }) {
     if (el.type === 'checkbox' || el.type === 'radio') flags.push(el.checked ? 'checked' : 'unchecked');
     else if (el.getAttribute('aria-checked')) flags.push(el.getAttribute('aria-checked') === 'true' ? 'checked' : 'unchecked');
     if (el.getAttribute('aria-expanded')) flags.push(`expanded=${el.getAttribute('aria-expanded')}`);
+    // What a visitor sees as the chosen one: a highlighted slot, the open tab, the current step.
+    if (el.getAttribute('aria-pressed') === 'true') flags.push('pressed');
+    if (el.getAttribute('aria-selected') === 'true') flags.push('selected');
+    const current = el.getAttribute('aria-current');
+    if (current && current !== 'false') flags.push('current');
     if (el.getAttribute('aria-invalid') === 'true') flags.push('invalid');
     if (el.required || el.getAttribute('aria-required') === 'true') flags.push('required');
     const hb = hitBox(el);
@@ -341,7 +365,9 @@ function pageSnapshot({ maxElements, mobile, keyboard, nextRef, deviceWidth }) {
     contentWidth: Math.max(doc.scrollWidth, vw),
     frames,
     mutations: window.__utMut || 0,
-    stateKey: `${document.body.innerText || ''}#${formState}#${ariaState}`,
+    // Shadow-root text is in neither body.innerText nor the mutation count, so
+    // the listed elements are part of the key too.
+    stateKey: `${document.body.innerText || ''}#${formState}#${ariaState}#${items.map((i) => `${i.ref}:${i.name}:${i.value ?? ''}:${i.flags.join(',')}`).join('|')}`,
     bodyText: (document.body.innerText || '').slice(0, 50000),
   };
 }

@@ -51,13 +51,17 @@ const LONG_LIVED: [&str; 8] = [
 /// Playwright's iPhone 13 descriptor.
 const IPHONE_UA: &str = "Mozilla/5.0 (iPhone; CPU iPhone OS 15_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Mobile/15E148 Safari/604.1";
 
-pub const VERDICT_PERCEIVED: [&str; 6] = [
+/// The element flags a visitor perceives; the rest are diagnostics.
+pub const PERCEIVED: [&str; 9] = [
     "checked",
     "unchecked",
     "disabled",
     "invalid",
     "required",
     "expanded=",
+    "pressed",
+    "selected",
+    "current",
 ];
 
 fn adversarial(text: &str) -> String {
@@ -1340,9 +1344,9 @@ impl Driver {
             None => {}
         }
         lines.push(if self.keyboard {
-            "elements (reading order; you can only reach these with the keyboard; * = outside viewport):".into()
+            "elements (reading order; you can only reach these with the keyboard; * = not on your screen):".into()
         } else {
-            "elements (reading order; * = outside viewport):".into()
+            "elements (reading order; * = not on your screen; scroll to it before acting on it):".into()
         });
         for it in snap
             .get("items")
@@ -1382,7 +1386,7 @@ impl Driver {
                 .map(|a| {
                     a.iter()
                         .filter_map(Value::as_str)
-                        .filter(|f| VERDICT_PERCEIVED.iter().any(|p| f.starts_with(p)))
+                        .filter(|f| PERCEIVED.iter().any(|p| f.starts_with(p)))
                         .collect()
                 })
                 .unwrap_or_default();
@@ -1451,6 +1455,18 @@ impl Driver {
         w
     }
 
+    /// A person cannot tap, type into, or pick from what is not on their
+    /// screen; refused before the step, so it costs no budget.
+    fn on_screen(&mut self, r: &str) -> Result<(), String> {
+        match self.js(&format!("(() => {{ const el = utFind({0}); return el ? utOffScreen(el, {0}) : null; }})()", json!(r))) {
+            Ok(v) => match v.get("error").and_then(Value::as_str) {
+                Some(e) => Err(e.to_string()),
+                None => Ok(()),
+            },
+            Err(_) => Ok(()),
+        }
+    }
+
     fn element_extra(&self, r: &str, warn: bool) -> Result<Extra, String> {
         let item = self.locate(r)?;
         Ok(Extra {
@@ -1500,6 +1516,7 @@ impl Driver {
             "observe" => self.record("observe", vec![], Extra::default(), Act::None),
             "click" => {
                 let extra = self.element_extra(&first, true)?;
+                self.on_screen(&first)?;
                 if self.mobile {
                     self.record("tap", vec![first.clone()], extra, Act::Tap(first))
                 } else {
@@ -1508,11 +1525,13 @@ impl Driver {
             }
             "fill" => {
                 let extra = self.element_extra(&first, true)?;
+                self.on_screen(&first)?;
                 let text = adversarial(&tail);
                 self.record("fill", vec![first.clone(), truncate(&text, 80)], extra, Act::Fill(first, text))
             }
             "select" => {
                 let extra = self.element_extra(&first, false)?;
+                self.on_screen(&first)?;
                 self.record("select", vec![first.clone(), tail.clone()], extra, Act::Select(first, tail))
             }
             "press" => {
