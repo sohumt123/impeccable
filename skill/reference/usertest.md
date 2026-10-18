@@ -105,7 +105,7 @@ Severity follows critique's P0-P3 scale. A failure the low tier hits alone is st
 
 ### Synthesis
 
-Run `{{scripts_path}}/impeccable usertest stopall <session dir>` first, so no browser outlives the session, then `{{scripts_path}}/impeccable usertest summarize <session dir> --html`. It prints the verdict legend, the matrix, and the per-run evidence, and writes `summary.md` and `summary.html` (verdict matrix plus a screenshot per marked step) into the session directory. Then build the report from it:
+Run `{{scripts_path}}/impeccable usertest stopall <session dir>` first, so no browser outlives the session; if it exits 2 with runs still busy, run it again until it exits 0. Then run `{{scripts_path}}/impeccable usertest summarize <session dir> --html`. It prints the verdict legend, the matrix, and the per-run evidence, and writes `summary.md` and `summary.html` (verdict matrix plus a screenshot per marked step) into the session directory. Then build the report from it:
 
 1. **Read the evidence, not the narration.** For each failed or noted run, open the screenshots at the steps the summary marks. Confirm the finding is real: a dead action on an element that should do nothing is not a finding; a runner that misread a clear label is a weak signal unless other runs misread it too.
 2. **Merge across runs.** One defect hit by four runs is one finding with four citations, not four findings. Count how many runs and which personas and tiers hit each one; that count is the strongest signal in the report.

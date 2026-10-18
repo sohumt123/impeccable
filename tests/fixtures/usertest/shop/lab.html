@@ -9,6 +9,8 @@
   <a href="/lab.html#opened" target="_blank">Open help in a new tab</a>
   <button id="close" hidden>Close this tab</button>
   <a href="https://example.com/">Visit our partner</a>
+  <button id="script-tab">Open by script</button>
+  <button id="script-partner">Open partner by script</button>
   <label for="when">Visit date</label> <input type="date" id="when">
   <button id="times">Show times</button> <p id="slots"></p>
   <x-greeting></x-greeting>
@@ -23,6 +25,8 @@
       close.hidden = false;
       close.addEventListener('click', () => window.close());
     }
+    document.getElementById('script-tab').addEventListener('click', () => window.open('/lab.html#opened'));
+    document.getElementById('script-partner').addEventListener('click', () => window.open('https://example.org/'));
     document.getElementById('far').addEventListener('click', () => (document.getElementById('out').textContent = 'Far reached'));
     document.getElementById('times').addEventListener('click', async () => {
       const out = document.getElementById('slots');

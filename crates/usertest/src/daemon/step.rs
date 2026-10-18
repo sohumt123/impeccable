@@ -93,7 +93,8 @@ impl Driver {
         let after = match self.observe_after(action) {
             Ok(a) => a,
             Err(Fail::Dialog) => return Ok(self.dialog_step(action, &args, &extra, None)),
-            Err(Fail::Msg(m)) => return Err(m),
+            // The action happened; the page just never came back to be read.
+            Err(Fail::Msg(m)) => return Ok(self.stalled_step(action, &args, &extra, &m)),
         };
         self.step += 1;
         let shot = self.run_dir.join(format!("step-{:02}.png", self.step));
@@ -111,7 +112,10 @@ impl Driver {
             .and_then(|b| b.get("focused"))
             .filter(|f| !f.is_null())
             .cloned();
-        let dead = effect == "none" && error.is_none() && {
+        // A link the run would not follow did nothing because of the driver,
+        // not the product.
+        let blocked = !self.pending.blocked.is_empty();
+        let dead = effect == "none" && error.is_none() && !blocked && {
             let key = args.first().map(String::as_str);
             match action {
                 "click" | "tap" => is_actionable(extra.role.as_deref().unwrap_or("")),
@@ -196,6 +200,38 @@ impl Driver {
             early,
             waited_ms,
         })
+    }
+
+    /// The page stopped answering after the action: record the step with what
+    /// went wrong, so the trace shows the hang and the budget stays spent.
+    fn stalled_step(&mut self, action: &str, args: &[String], extra: &Extra, why: &str) -> String {
+        self.step += 1;
+        let error = first_line(why, 240);
+        let entry = json!({
+            "step": self.step, "action": action, "args": args, "target": extra.target,
+            "targetRole": extra.role, "effect": "unknown", "dead": false, "error": error,
+            "url": self.current_url(),
+            "console": std::mem::take(&mut self.pending.console),
+            "pageErrors": std::mem::take(&mut self.pending.page_errors),
+            "network": std::mem::take(&mut self.pending.network),
+            "dialogs": [], "tabs": [], "warnings": extra.warnings,
+            "goalMet": self.goal_met_at.is_some(),
+        });
+        self.append(&entry);
+        let target = extra
+            .target
+            .as_ref()
+            .map(|t| format!(" {t}"))
+            .unwrap_or_default();
+        [
+            format!(
+                "step {} · {action}{target} · effect: unknown · ERROR: {error}",
+                self.step
+            ),
+            "the page did not finish responding; observe again, or give up the way this persona would".into(),
+            format!("actions left: {}", self.budget.saturating_sub(self.actions)),
+        ]
+        .join("\n")
     }
 
     /// The page froze behind a confirm or prompt: record the moment and hand

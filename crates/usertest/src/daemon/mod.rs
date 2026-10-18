@@ -22,7 +22,7 @@ mod serve;
 mod step;
 mod verbs;
 
-pub use serve::{serve, write_first};
+pub use serve::{catch_signals, serve, write_first};
 pub use verbs::RUNNER_VERBS;
 
 use std::collections::{HashMap, HashSet};
@@ -37,6 +37,11 @@ use crate::hosts;
 
 const PAGE_JS: &str = include_str!("../../assets/page.js");
 const COMMAND_TIMEOUT: Duration = Duration::from_secs(30);
+/// One verb's whole budget, comfortably under the client's wait
+/// (`lib::VERB_TIMEOUT`), so a hung page yields a recorded step, not a
+/// client that gave up.
+const VERB_TIMEOUT: Duration = Duration::from_secs(90);
+const STALLED: &str = "the page stopped responding";
 /// Requests that never settle on their own; waiting on them would stall every action.
 const LONG_LIVED: [&str; 8] = [
     "WebSocket",
@@ -95,7 +100,12 @@ pub struct Driver {
     browser: Browser,
     tab: Tab,
     opener_stack: Vec<Tab>,
-    popups: Vec<(String, String)>,
+    /// Tabs the page opened, configured and resumed, not yet switched to.
+    popups: Vec<Tab>,
+    /// Tabs that have not yet committed a first document.
+    fresh_tabs: HashSet<String>,
+    /// New tabs closed because their first page was off the site.
+    closed_tabs: HashSet<String>,
     run_dir: PathBuf,
     sealed: Value,
     result_file: PathBuf,
@@ -121,6 +131,9 @@ pub struct Driver {
     dialog: Option<OpenDialog>,
     blocked_cmd: Option<u64>,
     restore_script: Option<String>,
+    verb_deadline: Option<Instant>,
+    /// A tab just switched to may have loaded before its events counted.
+    check_ready: bool,
 }
 
 fn s<'a>(v: &'a Value, key: &str) -> &'a str {
@@ -192,8 +205,16 @@ impl Driver {
                     && s(&info, "openerId") == self.tab.target
                     && s(&info, "targetId") != self.tab.target;
                 if ours {
-                    self.popups
-                        .push((new_session, s(&info, "targetId").to_string()));
+                    // Configured and resumed right away: the opener is blocked
+                    // inside window.open until the new tab runs.
+                    let target = s(&info, "targetId").to_string();
+                    self.configure_new_tab(&new_session);
+                    self.fresh_tabs.insert(target.clone());
+                    self.popups.push(Tab {
+                        session: new_session,
+                        main_frame: target.clone(),
+                        target,
+                    });
                 } else {
                     let _ = self.browser.post_raw(
                         Some(&new_session),
@@ -204,15 +225,29 @@ impl Driver {
                 return;
             }
             "Target.detachedFromTarget" => {
-                // The tab closed itself (window.close): back to the one that opened it.
-                if s(&p, "sessionId") == self.tab.session {
+                let gone = s(&p, "sessionId");
+                let target = s(&p, "targetId");
+                // The tab closed (window.close, or a blocked first page): back
+                // to the one that opened it.
+                if gone == self.tab.session {
                     if let Some(prev) = self.opener_stack.pop() {
                         self.tab = prev;
                         self.inflight.clear();
                         self.dom_ready = true;
                     }
+                    if self.closed_tabs.contains(target) {
+                        self.pending.tabs = self.pending.tabs.saturating_sub(1);
+                    }
                 }
+                self.popups.retain(|t| t.session != gone);
+                self.opener_stack.retain(|t| t.session != gone);
                 return;
+            }
+            // A tab's main frame id is its target id.
+            "Page.frameNavigated" if p.pointer("/frame/parentId").is_none() => {
+                if let Some(id) = p.pointer("/frame/id").and_then(Value::as_str) {
+                    self.fresh_tabs.remove(id);
+                }
             }
             // Every session this run opened has interception on, including a
             // new tab not yet adopted, so a paused request is always answered.
@@ -361,7 +396,7 @@ impl Driver {
         let frame = s(p, "frameId");
         let top = frame == self.tab.target
             || self.opener_stack.iter().any(|t| t.target == frame)
-            || self.popups.iter().any(|(_, t)| t == frame);
+            || self.popups.iter().any(|t| t.target == frame);
         if top && !hosts::may_visit(url, self.allowed_host.as_deref()) {
             // A navigation answered with 204 No Content leaves the current
             // page in place, which is what a dead-end link feels like.
@@ -372,6 +407,14 @@ impl Driver {
             );
             let host = hosts::host_of(url).unwrap_or_else(|| truncate(url, 80));
             self.pending.blocked.push(host);
+            // A new tab whose first page is off the site would leave the
+            // visitor on a blank tab; close it and stay on the opener.
+            if self.fresh_tabs.remove(frame) {
+                self.closed_tabs.insert(frame.to_string());
+                let _ =
+                    self.browser
+                        .post_raw(None, "Target.closeTarget", json!({ "targetId": frame }));
+            }
         } else {
             let _ = self.browser.post_raw(
                 Some(session),
@@ -383,6 +426,9 @@ impl Driver {
 
     /// Read whatever arrives before `deadline`, handling each message.
     fn pump(&mut self, deadline: Instant) -> R<()> {
+        if self.verb_deadline.is_some_and(|d| Instant::now() >= d) {
+            return Err(Fail::Msg(STALLED.into()));
+        }
         loop {
             match self.browser.next_message(deadline) {
                 Ok(Some(m)) => self.handle(m),
@@ -390,7 +436,7 @@ impl Driver {
                 Err(e) => return Err(Fail::Msg(e.message)),
             }
         }
-        self.adopt_popups()?;
+        self.adopt_popups();
         if self.dialog.is_some() {
             return Err(Fail::Dialog);
         }
@@ -406,10 +452,19 @@ impl Driver {
             .browser
             .post_raw(session, method, params)
             .map_err(|e| Fail::Msg(e.message))?;
-        let deadline = Instant::now() + COMMAND_TIMEOUT;
+        let mut deadline = Instant::now() + COMMAND_TIMEOUT;
+        if let Some(d) = self.verb_deadline {
+            if Instant::now() >= d {
+                return Err(Fail::Msg(STALLED.into()));
+            }
+            deadline = deadline.min(d);
+        }
         loop {
             let msg = match self.browser.next_message(deadline) {
                 Ok(Some(m)) => m,
+                Ok(None) if self.verb_deadline.is_some_and(|d| Instant::now() >= d) => {
+                    return Err(Fail::Msg(STALLED.into()))
+                }
                 Ok(None) => return Err(Fail::Msg(format!("{method} timed out"))),
                 Err(e) => return Err(Fail::Msg(e.message)),
             };
@@ -502,6 +557,8 @@ impl Driver {
             },
             opener_stack: Vec::new(),
             popups: Vec::new(),
+            fresh_tabs: HashSet::new(),
+            closed_tabs: HashSet::new(),
             run_dir,
             result_file,
             allowed_host,
@@ -530,8 +587,10 @@ impl Driver {
             dialog: None,
             blocked_cmd: None,
             restore_script: None,
+            verb_deadline: None,
+            check_ready: false,
         };
-        d.setup_tab(&session, false).map_err(fail_text)?;
+        d.setup_tab(&session).map_err(fail_text)?;
         d.restore_storage().map_err(fail_text)?;
         // New tabs the page opens start paused, so they are configured like
         // this one before their first script runs.
@@ -544,12 +603,9 @@ impl Driver {
         Ok(d)
     }
 
-    /// Enable the domains, the navigation guard, the mutation counter, and
-    /// the device on a tab. A tab the page just opened is paused before its
-    /// first script and does not answer until resumed, so its setup is written
-    /// without waiting (the browser applies a session's commands in order)
-    /// and then resumed.
-    fn setup_tab(&mut self, session: &str, paused: bool) -> R<()> {
+    /// What every tab gets: the domains, the navigation guard, the mutation
+    /// counter, and the device.
+    fn tab_commands(&self) -> Vec<(&'static str, Value)> {
         let (w, h, dsf) = self.device;
         let mut cmds: Vec<(&str, Value)> = vec![
             ("Page.enable", json!({})),
@@ -588,54 +644,46 @@ impl Driver {
                 json!({ "offline": false, "latency": 400, "downloadThroughput": 50_000, "uploadThroughput": 20_000 }),
             ));
         }
-        for (method, params) in cmds {
-            if paused {
-                self.browser
-                    .post_raw(Some(session), method, params)
-                    .map_err(|e| Fail::Msg(e.message))?;
-            } else {
-                self.call_on(Some(session), method, params)?;
-            }
-        }
-        if paused {
-            self.browser
-                .post_raw(Some(session), "Runtime.runIfWaitingForDebugger", json!({}))
-                .map_err(|e| Fail::Msg(e.message))?;
+        cmds
+    }
+
+    /// Set up the run's first tab, waiting for each command.
+    fn setup_tab(&mut self, session: &str) -> R<()> {
+        for (method, params) in self.tab_commands() {
+            self.call_on(Some(session), method, params)?;
         }
         let tree = self.call_on(Some(session), "Page.getFrameTree", json!({}))?;
-        let main = tree
+        self.tab.main_frame = tree
             .pointer("/frameTree/frame/id")
             .and_then(Value::as_str)
             .unwrap_or("")
             .to_string();
-        if session == self.tab.session {
-            self.tab.main_frame = main;
-        }
         Ok(())
     }
 
-    fn adopt_popups(&mut self) -> R<()> {
-        while let Some((session, target)) = self.popups.pop() {
-            let saved = self.tab.clone();
-            self.tab = Tab {
-                session: session.clone(),
-                target,
-                main_frame: String::new(),
-            };
-            match self.setup_tab(&session, true) {
-                Ok(()) => {
-                    self.opener_stack.push(saved);
-                    self.inflight.clear();
-                    self.dom_ready = false;
-                    self.pending.tabs += 1;
-                }
-                Err(e) => {
-                    self.tab = saved;
-                    return Err(e);
-                }
-            }
+    /// Set up a tab the page just opened. It is paused before its first
+    /// script and answers nothing until resumed, so the setup is written
+    /// without waiting (the browser applies a session's commands in order)
+    /// and then the tab is resumed.
+    fn configure_new_tab(&mut self, session: &str) {
+        for (method, params) in self.tab_commands() {
+            let _ = self.browser.post_raw(Some(session), method, params);
         }
-        Ok(())
+        let _ = self
+            .browser
+            .post_raw(Some(session), "Runtime.runIfWaitingForDebugger", json!({}));
+    }
+
+    /// Switch to the newest tab the page opened, as a browser does.
+    fn adopt_popups(&mut self) {
+        while let Some(tab) = self.popups.pop() {
+            let opener = std::mem::replace(&mut self.tab, tab);
+            self.opener_stack.push(opener);
+            self.inflight.clear();
+            self.dom_ready = false;
+            self.check_ready = true;
+            self.pending.tabs += 1;
+        }
     }
 
     /// Cookies and local storage from `--storage-state` (Playwright's file

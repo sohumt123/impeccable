@@ -734,6 +734,7 @@ dependencies = [
  "getrandom 0.2.17",
  "impeccable-browser",
  "impeccable-common",
+ "percent-encoding",
  "serde_json",
  "url",
 ]

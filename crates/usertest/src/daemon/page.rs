@@ -19,6 +19,12 @@ impl Driver {
     pub(super) fn settle(&mut self, dom_timeout: Duration) -> R<u64> {
         let start = Instant::now();
         self.wait(150)?;
+        if std::mem::take(&mut self.check_ready) {
+            let state = self.eval("location.href === 'about:blank' ? '' : document.readyState")?;
+            if matches!(state.as_str(), Some("interactive" | "complete")) {
+                self.dom_ready = true;
+            }
+        }
         let dom_deadline = Instant::now() + dom_timeout;
         while !self.dom_ready && Instant::now() < dom_deadline {
             self.wait(50)?;
@@ -170,11 +176,21 @@ fn url_matches(page: &str, check: &str) -> bool {
     let Ok(u) = url::Url::parse(page) else {
         return false;
     };
-    let part = if check.starts_with('#') {
-        u.fragment().map(|f| format!("#{f}")).unwrap_or_default()
-    } else {
-        u.path().to_string()
+    // The URL keeps the path and hash percent-encoded; the check is written
+    // the way a person reads it (`/café`), so compare decoded forms.
+    let decoded = |t: &str| {
+        percent_encoding::percent_decode_str(t)
+            .decode_utf8_lossy()
+            .into_owned()
     };
+    let part = if check.starts_with('#') {
+        u.fragment()
+            .map(|f| format!("#{}", decoded(f)))
+            .unwrap_or_default()
+    } else {
+        decoded(u.path())
+    };
+    let check = &decoded(check);
     let check = check.trim_end_matches('/');
     if check.is_empty() || check == "#" {
         return part.is_empty() || part == "/" || part == "#" || part == "#/";
@@ -203,5 +219,7 @@ mod tests {
         assert!(url_matches("http://h/#/done/ok", "#/done"));
         assert!(url_matches("http://h/", "/"));
         assert!(!url_matches("not a url", "/done"));
+        assert!(url_matches("http://h/caf%C3%A9/menu", "/café"));
+        assert!(url_matches("http://h/caf%C3%A9", "/caf%C3%A9"));
     }
 }

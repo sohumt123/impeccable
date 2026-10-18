@@ -16,6 +16,13 @@ const IDLE: Duration = Duration::from_secs(15 * 60);
 
 static INTERRUPTED: AtomicBool = AtomicBool::new(false);
 
+/// Catch SIGINT/SIGTERM from the start of the daemon's life, so a `start`
+/// that gives up on a slow launch still gets the browser closed and its
+/// profile removed.
+pub fn catch_signals() {
+    impeccable_common::proc::on_interrupt(&INTERRUPTED);
+}
+
 /// What `start` is waiting for: the first observation (`code` 0), or why the
 /// run could not begin (`USERTEST_*` exit codes, see lib.rs).
 pub fn write_first(run_dir: &Path, code: i32, text: &str) {
@@ -25,7 +32,10 @@ pub fn write_first(run_dir: &Path, code: i32, text: &str) {
 
 /// Serve one run. `owner` is a pid the run should not outlive (tests).
 pub fn serve(mut driver: Driver, run_dir: &Path, owner: Option<i64>) -> i32 {
-    impeccable_common::proc::on_interrupt(&INTERRUPTED);
+    if INTERRUPTED.load(Ordering::SeqCst) {
+        driver.discard();
+        return 0;
+    }
     let listener = match TcpListener::bind("127.0.0.1:0") {
         Ok(l) => l,
         Err(e) => {
@@ -40,7 +50,7 @@ pub fn serve(mut driver: Driver, run_dir: &Path, owner: Option<i64>) -> i32 {
         Ok(first) => first,
         Err(e) => {
             write_first(run_dir, 5, &format!("USERTEST_TARGET_UNREACHABLE: {e}"));
-            driver.shutdown("the start URL did not load");
+            driver.discard();
             return 5;
         }
     };

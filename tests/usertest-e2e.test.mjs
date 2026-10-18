@@ -315,7 +315,29 @@ describe('impeccable usertest', () => {
     assert.match(o, /leads off the site being tested \(to example\.com\)/);
     assert.match(o, /effect: none/);
     assert.match(o, /page: "Driver lab" http:\/\/127\.0\.0\.1:\d+\/lab\.html\n/);
-    assert.ok(trace(dir).some((s) => s.blocked?.includes('example.com')));
+    // The driver stopped it, so it is not a dead link in the product.
+    const blocked = trace(dir).find((s) => s.blocked?.includes('example.com'));
+    assert.ok(blocked, 'blocked navigation recorded');
+    assert.equal(blocked.dead, false);
+    // A script popup to another host is closed; the run stays on the opener.
+    const t0 = Date.now();
+    o = await act(dir, 'click', refFor(o, /button "Open partner by script"/));
+    assert.ok(Date.now() - t0 < 20000, 'a script popup does not stall the click');
+    assert.match(o, /leads off the site being tested \(to example\.org\)/);
+    assert.doesNotMatch(o, /a new tab opened/);
+    assert.match(o, /page: "Driver lab" http:\/\/127\.0\.0\.1:\d+\/lab\.html\n/);
+  });
+
+  it('follows a tab opened from script without stalling the click', async (t) => {
+    if (!browserOk) return t.skip('engine binary or Chrome unavailable');
+    const dir = path.join(newSession('script-tab'), 'd-riley-low');
+    let o = await start(dir, '--url', `${base}lab.html`, '--persona', 'Riley');
+    const t0 = Date.now();
+    o = await act(dir, 'click', refFor(o, /button "Open by script"/));
+    assert.ok(Date.now() - t0 < 20000, 'the click returned promptly');
+    assert.doesNotMatch(o, /ERROR/);
+    assert.match(o, /a new tab opened/);
+    assert.match(o, /lab\.html#opened/);
   });
 
   it('flags a page wider than the phone, marks what the phone cannot show, and pans to it with a swipe', async (t) => {

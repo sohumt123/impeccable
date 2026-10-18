@@ -50,6 +50,8 @@ const OWNER_ENV: &str = "IMPECCABLE_USERTEST_OWNER_PID";
 /// The first page load on a slow network can take this long (navigation,
 /// DOMContentLoaded, the quiet wait, the snapshot), plus the browser launch.
 const START_TIMEOUT: Duration = Duration::from_secs(150);
+/// How long the client waits for one verb; the daemon gives each verb 90 s.
+const VERB_TIMEOUT: Duration = Duration::from_secs(120);
 
 struct Args {
     positional: Vec<String>,
@@ -383,6 +385,7 @@ fn spawn_daemon(run_dir: &Path, io: &mut Io) -> i32 {
 }
 
 fn serve(opts: &Args, io: &mut Io) -> i32 {
+    daemon::catch_signals();
     let Some(run) = opts.flags.get("run") else {
         return fail(io, "__serve needs --run", 1);
     };
@@ -463,7 +466,7 @@ fn send(role: &str, verb: &str, opts: &Args, positional: &[String], io: &mut Io)
             .unwrap_or_default(),
     );
     let body = json!({ "role": role, "verb": verb, "positional": positional, "flags": flags });
-    match post(&info, &body, Duration::from_secs(120)) {
+    match post(&info, &body, VERB_TIMEOUT) {
         Ok((200, data)) => {
             io.out(&format!("{data}\n"));
             0

@@ -410,6 +410,13 @@ impl Driver {
     /// Answer one request: refuse what the sender or the run's state does not
     /// allow, run the verb, and log every refusal before the run ends.
     pub(super) fn dispatch(&mut self, req: &Request) -> (u16, String, Then) {
+        self.verb_deadline = Some(std::time::Instant::now() + super::VERB_TIMEOUT);
+        let out = self.dispatch_now(req);
+        self.verb_deadline = None;
+        out
+    }
+
+    fn dispatch_now(&mut self, req: &Request) -> (u16, String, Then) {
         let verb = req.verb.as_str();
         match (req.role, verb) {
             (_, "ping") => return (200, "pong".into(), Then::Continue),
@@ -455,6 +462,13 @@ impl Driver {
                 (400, format!("ERROR: {reason}"), Then::Continue)
             }
         }
+    }
+
+    /// End a run that never began (its start URL did not load): no verdict
+    /// is written, since there is no run to judge.
+    pub fn discard(mut self) {
+        self.done = true;
+        self.shutdown("the start URL did not load");
     }
 
     /// End the run: a run that never called `done` is recorded as claiming
