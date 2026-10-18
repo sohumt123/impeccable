@@ -1,0 +1,7 @@
+{
+  "stdout": "",
+  "stderr": "run directory names use letters, digits, '-', '_', '.'; got \"a b\"\n",
+  "exit": 1,
+  "signal": null,
+  "files": {}
+}

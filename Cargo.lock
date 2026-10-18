@@ -735,6 +735,7 @@ dependencies = [
  "impeccable-browser",
  "impeccable-common",
  "serde_json",
+ "url",
 ]
 
 [[package]]

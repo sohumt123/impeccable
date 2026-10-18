@@ -6,7 +6,7 @@ Send personas into the running product to complete real goals, at more than one 
 
 - Every finding cites evidence from a trace: a run, a step number, and a screenshot or driver line. A finding without a trace reference is critique, not usertest; leave it out or route it to `critique`.
 - Success is what the driver verified, not what a runner claimed. Report both when they disagree; the disagreement is itself a finding.
-- You start every run's driver; the runner only acts. The persona's constraints (device, keyboard-only, network, budget) and the goal's success check go to `start`, which seals them outside the run directory. A runner never sees a success check, a profile flag, source code, an app file path, or a fixture's planted-defect list.
+- You start every run's driver; the runner only acts. The persona's constraints (device, keyboard-only, network, budget) and the goal's success check go to `start`, which seals them under `~/.impeccable/usertest/sealed/`, outside the session directory. A runner never sees a success check, a profile flag, source code, an app file path, or a fixture's planted-defect list.
 - Each run is a fresh sub-agent with no forked history. A runner that inherits this conversation knows the code, the success checks, and your hypotheses, and stops being a visitor.
 - Runners see what a visitor perceives; the driver keeps the diagnostics (console and network errors, unlabeled and pointer-only controls, target sizes, focus rings) in the trace. Never paste diagnostics into a runner's packet.
 - The driver owns the browser. Do not drive runs inline through the harness browser tool: parallel runs need isolated sessions, and the report needs the driver's trace.
@@ -20,11 +20,11 @@ Send personas into the running product to complete real goals, at more than one 
 ### Setup
 
 1. **Preflight the driver** once: `{{scripts_path}}/impeccable usertest preflight`. The driver is part of the engine and drives an installed Chrome, Chromium, Edge, or Brave, found the same way `impeccable detect <url>` finds one. On `USERTEST_NO_BROWSER`, tell the user which browser to install, or that `IMPECCABLE_BROWSER` can point at one, and stop. Do not continue without `USERTEST_READY`.
-2. **Resolve a start URL.** Use the running dev server if there is one; otherwise start the project's dev or static server in the background. `file://` is not supported. Confirm the URL loads before starting anything.
-   - **Local by default.** The driver refuses any host that is not this machine (`USERTEST_REMOTE_TARGET`). Runners click everything: against a staging or production site that means real orders, emails, and deletions. Pass `--allow-remote` only after the user has named that host and agreed, and never against a site that takes real payments. Confirm and prompt dialogs pause the run until the runner answers them, as a visitor would.
-   - **Signed-in goals.** When a goal needs an account, sign in once yourself before the matrix: `start` a setup run with no `--persona` on the login page, drive it to the signed-in state with the test credentials the user gives you, then `save-state ~/.impeccable/usertest/auth/<slug>.json` and `stop`. The file holds live cookies; it is written with owner-only permissions and stays outside the project. Every runner's `start` then carries `--storage-state` with that path. Runners never see credentials. Signing up or logging in as the goal itself needs no saved state.
-3. **Slug the target** with `{{scripts_path}}/impeccable critique-storage slug "<start url or source path>"`. The session directory is `.impeccable/usertest/<slug>/<YYYYMMDD-HHMM>/`; each run writes to its own subdirectory, named `<goal id>-<persona>-<tier>` (for example `a-jordan-low`), and the driver keeps sealed profiles and verdicts in `_sealed/` beside them.
-4. **Permissions.** A matrix makes several hundred driver calls from sub-agents. Runners need exactly two permissions: shell commands that start with `<scripts path>/impeccable usertest`, and reading files under the session directory (their screenshots). On a harness that prompts per command, tell the user before starting and suggest allowing those two for the session and nothing broader. Do not run a matrix with permission checks bypassed against a site you did not build: runners read whatever the page says, and the permission rules are what keep a hostile page from steering one.
+2. **Resolve a start URL.** Use the running dev server if there is one; otherwise start the project's dev or static server in the background. `file://` is not supported. Confirm the URL loads before starting anything; `start` exits 5 with `USERTEST_TARGET_UNREACHABLE` when it does not.
+   - **Local by default.** The driver refuses a start URL on any host that is not this machine (`USERTEST_REMOTE_TARGET`), and during the run it blocks any page navigation to another host, so a link off the site reads to the runner as a dead end. Runners click everything: against a staging or production site that means real orders, emails, and deletions. Pass `--allow-remote` only after the user has named that host and agreed, and never against a site that takes real payments; it allows that one host and no other. Requests the page itself makes (APIs, embedded widgets) are not blocked. Confirm and prompt dialogs pause the run until the runner answers them, as a visitor would.
+   - **Signed-in goals.** When a goal needs an account, sign in once yourself before the matrix: `start` a setup run with no `--persona` on the login page, drive it to the signed-in state with `usertest act` and the test credentials the user gives you, then `{{scripts_path}}/impeccable usertest save-state ~/.impeccable/usertest/auth/<slug>.json --run <setup run dir>` and `{{scripts_path}}/impeccable usertest stop --run <setup run dir>`. The file holds live cookies; it is written with owner-only permissions and stays outside the project. Every runner's `start` then carries `--storage-state` with that path. Runners never see credentials. Signing up or logging in as the goal itself needs no saved state.
+3. **Slug the target** with `{{scripts_path}}/impeccable critique-storage slug "<start url or source path>"`. The session directory is `.impeccable/usertest/<slug>/<YYYYMMDD-HHMM>/`; each run writes to its own subdirectory, named `<goal id>-<persona>-<tier>` (for example `a-jordan-low`).
+4. **Permissions.** A matrix makes several hundred driver calls from sub-agents. Runners need exactly two permissions: shell commands that start with `<scripts path>/impeccable usertest act`, and reading `.png` files under the session directory (their screenshots). `usertest act` reaches only the runner verbs; starting, stopping, saving state, and summarizing stay yours. On a harness that prompts per command, tell the user before starting and suggest allowing those two for the session and nothing broader. Do not run a matrix with permission checks bypassed against a site you did not build: runners read whatever the page says, and the permission rules are what keep a hostile page from steering one.
 
 ### Goals
 
@@ -64,7 +64,7 @@ On a harness with no per-agent model choice, run one tier and say so in the repo
 
 ### Run matrix
 
-Default: every confirmed goal × the 2-3 personas the selection table picks × `low` and `mid`. Add Sam whenever a goal involves a form or a custom control. State the matrix, its run count, and its cost before starting. Measured on Claude Code, a run costs about $0.01 at low, $0.10 at mid, and $0.12 at high (up to $0.55), and takes 30-220 seconds; a 28-run default matrix comes to $1-2.50. Above 32 runs, ask first.
+Default: every confirmed goal × the 2-3 personas the selection table picks × `low` and `mid`. Add Sam whenever a goal involves a form or a custom control. State the matrix, its run count, and its cost before starting. Measured on Claude Code, a run costs about $0.01 at low, $0.10 at mid, and $0.12 at high (up to $0.55), and takes 30-220 seconds; the largest default matrix (3 goals, 4 personas, 2 tiers: 24 runs) comes to $1-2. Above 32 runs, ask first.
 
 For each cell, start its driver yourself, then spawn its runner:
 
@@ -79,7 +79,7 @@ Start runs in parallel, at most six at a time; each driver launches its own brow
 ```
 You are <persona name>. <Profile and Behaviors from the card, plus the driving-profile behavior line>
 Your goal: <goal text in the visitor's words>
-Driver: <absolute path to {{scripts_path}}>/impeccable usertest
+Driver: <absolute path to {{scripts_path}}>/impeccable usertest act
 Run directory: <absolute session dir>/<run name>
 ```
 

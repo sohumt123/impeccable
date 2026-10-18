@@ -7,6 +7,8 @@
   <button id="del">Delete everything</button>
   <p id="out" role="status"></p>
   <a href="/lab.html#opened" target="_blank">Open help in a new tab</a>
+  <button id="close" hidden>Close this tab</button>
+  <a href="https://example.com/">Visit our partner</a>
   <label for="when">Visit date</label> <input type="date" id="when">
   <button id="times">Show times</button> <p id="slots"></p>
   <x-greeting></x-greeting>
@@ -16,6 +18,11 @@
     document.getElementById('del').addEventListener('click', () => {
       document.getElementById('out').textContent = confirm('Delete everything? This cannot be undone.') ? 'Deleted' : 'Kept';
     });
+    if (location.hash === '#opened') {
+      const close = document.getElementById('close');
+      close.hidden = false;
+      close.addEventListener('click', () => window.close());
+    }
     document.getElementById('far').addEventListener('click', () => (document.getElementById('out').textContent = 'Far reached'));
     document.getElementById('times').addEventListener('click', async () => {
       const out = document.getElementById('slots');

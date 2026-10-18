@@ -164,3 +164,15 @@ http.createServer((req, res) => {
   res.writeHead(200, { 'content-type': types[path.extname(file)] || 'application/octet-stream' });
   fs.createReadStream(file).pipe(res);
 }).listen(port, '127.0.0.1', () => console.log(`Harbor Clinic fixture on http://127.0.0.1:${port}/`));
+
+// Tests pass their own pid: exit with them, so a killed test run leaves no server behind.
+const owner = Number(process.env.IMPECCABLE_USERTEST_OWNER_PID);
+if (owner) {
+  setInterval(() => {
+    try {
+      process.kill(owner, 0);
+    } catch {
+      process.exit(0);
+    }
+  }, 2000).unref();
+}

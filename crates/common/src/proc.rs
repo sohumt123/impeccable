@@ -90,6 +90,28 @@ pub fn terminate(pid: i64) {
     }
 }
 
+/// [`terminate`] for a process started with [`detach`] and everything it
+/// spawned: on Unix `detach` made it a process-group leader, so the group is
+/// signalled; on Windows `taskkill /T` ends the process tree.
+pub fn terminate_group(pid: i64) {
+    if pid <= 0 || pid > i32::MAX as i64 {
+        return;
+    }
+    #[cfg(unix)]
+    unsafe {
+        libc::killpg(pid as libc::pid_t, libc::SIGTERM);
+    }
+    #[cfg(windows)]
+    {
+        let mut cmd = Command::new("taskkill");
+        cmd.args(["/PID", &pid.to_string(), "/T", "/F"])
+            .stdout(std::process::Stdio::null())
+            .stderr(std::process::Stdio::null());
+        hide_window(&mut cmd);
+        let _ = cmd.status();
+    }
+}
+
 /// `spawn(cmd, args, { detached: true })` + `child.unref()`: the child
 /// survives us. Unix: `setsid()` (its own session, so a terminal SIGHUP or a
 /// harness killing our process group does not take it down). Windows:

@@ -1,0 +1,7 @@
+{
+  "stdout": "",
+  "stderr": "unknown usertest verb \"click\"\n\nUsage: impeccable usertest <verb> [args]\n\nparent:  preflight\n         start --run <dir> --url <url> [--viewport desktop|mobile] [--input pointer|keyboard]\n               [--network fast|slow] [--budget <n>] [--success-text <text>] [--success-url <path or #hash>]\n               [--goal <text>] [--persona <name>] [--tier <label>] [--storage-state <file>] [--allow-remote]\n         save-state <file> --run <dir>\n         stop --run <dir>\n         stopall <session dir>\n         summarize <session dir> [--html]\nrunner:  act <verb> [args] --run <dir>, where <verb> is one of:\n         observe, click <ref>, fill <ref> <text>, select <ref> <option>, press <key>, type <text>,\n         scroll down|up|left|right|<ref>, back, reload, interrupt, answer ok|cancel [text],\n         dialogs accept|dismiss|ask, note <text> --kind friction|bug|confusion|praise,\n         done --outcome completed|abandoned|blocked|unsure <summary>\n\n",
+  "exit": 1,
+  "signal": null,
+  "files": {}
+}

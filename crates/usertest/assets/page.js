@@ -170,11 +170,6 @@ function utScrollTo(ref) {
   return { ok: true };
 }
 
-function utKind(ref) {
-  const el = utFind(ref);
-  return el && el.tagName === 'INPUT' ? el.type : '';
-}
-
 // Runs in the page. Tags every interactive or meaningful element with a ref and
 // returns a reading-order list plus the facts the personas' red flags need.
 function pageSnapshot({ maxElements, mobile, keyboard, nextRef, deviceWidth }) {

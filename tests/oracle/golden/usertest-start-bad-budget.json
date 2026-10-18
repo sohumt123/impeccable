@@ -1,0 +1,7 @@
+{
+  "stdout": "",
+  "stderr": "--budget must be a whole number from 1 to 500, got \"0\"\n",
+  "exit": 1,
+  "signal": null,
+  "files": {}
+}

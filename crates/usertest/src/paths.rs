@@ -1,24 +1,80 @@
-//! Where a run's files live, and the few file rules the verbs enforce.
+//! Where a run's files live, and the file rules the verbs enforce.
+//!
+//! A session directory (`.impeccable/usertest/<slug>/<stamp>/`) holds what a
+//! runner may see: its run directories, traces, and screenshots. What a
+//! runner must never see (the success check, the sealed profile, the
+//! verdict) lives under `~/.impeccable/usertest/sealed/<session id>/`, so no
+//! permission that lets a runner read its screenshots can reach it.
 
+use std::io::Write;
 use std::path::{Component, Path, PathBuf};
+
+fn usertest_home(home: &Path) -> PathBuf {
+    home.join(".impeccable").join("usertest")
+}
 
 /// Saved sign-in state lives here so it is never inside a project.
 pub fn auth_dir(home: &Path) -> PathBuf {
-    home.join(".impeccable").join("usertest").join("auth")
+    usertest_home(home).join("auth")
 }
 
-/// `<session>/_sealed/<run>.json`: the run's profile and success check,
-/// outside the run directory the runner works in.
-pub fn sealed_path(run_dir: &Path) -> PathBuf {
-    let name = run_dir
-        .file_name()
-        .map(|n| n.to_string_lossy().to_string())
-        .unwrap_or_default();
-    run_dir
-        .parent()
-        .unwrap_or(Path::new("."))
-        .join("_sealed")
-        .join(format!("{name}.json"))
+/// The session's id, from `<session>/session.json`. With `create`, the first
+/// `start` in a session writes it; parallel starts all read the same one.
+pub fn session_id(session: &Path, create: bool) -> std::io::Result<String> {
+    let file = session.join("session.json");
+    let read = || -> std::io::Result<String> {
+        let raw = std::fs::read_to_string(&file)?;
+        serde_json::from_str::<serde_json::Value>(&raw)
+            .ok()
+            .and_then(|v| v.get("id").and_then(|i| i.as_str()).map(String::from))
+            .filter(|id| is_simple_name(id))
+            .ok_or_else(|| std::io::Error::other(format!("{} has no usable id", file.display())))
+    };
+    if !create || file.exists() {
+        return read();
+    }
+    std::fs::create_dir_all(session)?;
+    let body = serde_json::json!({ "id": random_token()[..16] }).to_string();
+    match std::fs::OpenOptions::new()
+        .write(true)
+        .create_new(true)
+        .open(&file)
+    {
+        Ok(mut f) => f.write_all(body.as_bytes())?,
+        // Another start won the race; use its id.
+        Err(e) if e.kind() == std::io::ErrorKind::AlreadyExists => {}
+        Err(e) => return Err(e),
+    }
+    read()
+}
+
+/// The sealed directory for one session.
+pub fn sealed_dir(home: &Path, session_id: &str) -> PathBuf {
+    usertest_home(home).join("sealed").join(session_id)
+}
+
+/// A run's sealed profile and, beside it, its verdict.
+pub struct Sealed {
+    pub profile: PathBuf,
+    pub result: PathBuf,
+}
+
+pub fn sealed_files(home: &Path, session_id: &str, run_name: &str) -> Sealed {
+    let dir = sealed_dir(home, session_id);
+    Sealed {
+        profile: dir.join(format!("{run_name}.json")),
+        result: dir.join(format!("{run_name}.result.json")),
+    }
+}
+
+/// A run directory's name: one plain path segment.
+pub fn is_simple_name(name: &str) -> bool {
+    !name.is_empty()
+        && name != "."
+        && name != ".."
+        && name
+            .chars()
+            .all(|c| c.is_ascii_alphanumeric() || matches!(c, '-' | '_' | '.'))
 }
 
 /// `path.resolve(cwd, p)`: absolute and lexically normalized (no `..`).
@@ -46,9 +102,23 @@ pub fn within(file: &Path, dir: &Path) -> bool {
     file != dir && file.starts_with(dir)
 }
 
-/// Write a file only its owner can read (driver tokens, sealed checks, sign-in state).
+/// Where `save-state` may write: anywhere under the auth directory, or a
+/// `.json` file directly in the session directory (never inside a run).
+pub fn state_file_allowed(target: &Path, session: &Path, auth: &Path) -> bool {
+    let in_session = target.parent() == Some(session)
+        && target.extension().map(|e| e == "json").unwrap_or(false)
+        && target
+            .file_name()
+            .map(|n| n != "session.json")
+            .unwrap_or(false);
+    in_session || within(target, auth)
+}
+
+/// Write a file only its owner can read (driver tokens, sealed checks,
+/// verdicts, sign-in state), replacing it atomically.
 pub fn write_private(path: &Path, contents: &str) -> std::io::Result<()> {
-    let _ = std::fs::remove_file(path);
+    let tmp = tmp_beside(path);
+    let _ = std::fs::remove_file(&tmp);
     let mut opts = std::fs::OpenOptions::new();
     opts.write(true).create_new(true);
     #[cfg(unix)]
@@ -56,8 +126,23 @@ pub fn write_private(path: &Path, contents: &str) -> std::io::Result<()> {
         use std::os::unix::fs::OpenOptionsExt;
         opts.mode(0o600);
     }
-    use std::io::Write;
-    opts.open(path)?.write_all(contents.as_bytes())
+    opts.open(&tmp)?.write_all(contents.as_bytes())?;
+    std::fs::rename(&tmp, path)
+}
+
+/// Write a file another process polls for, so it never reads half of it.
+pub fn write_atomic(path: &Path, contents: &str) -> std::io::Result<()> {
+    let tmp = tmp_beside(path);
+    std::fs::write(&tmp, contents)?;
+    std::fs::rename(&tmp, path)
+}
+
+fn tmp_beside(path: &Path) -> PathBuf {
+    let name = path
+        .file_name()
+        .map(|n| n.to_string_lossy().to_string())
+        .unwrap_or_default();
+    path.with_file_name(format!(".{name}.{}.tmp", std::process::id()))
 }
 
 pub fn random_token() -> String {
@@ -84,26 +169,82 @@ mod tests {
     use super::*;
 
     #[test]
-    fn sealed_sits_beside_the_run() {
+    fn sealed_files_live_under_home_not_the_session() {
+        let s = sealed_files(Path::new("/home/u"), "ab12", "a-sam-low");
         assert_eq!(
-            sealed_path(Path::new("/s/sess/run-1")),
-            PathBuf::from("/s/sess/_sealed/run-1.json")
+            s.profile,
+            PathBuf::from("/home/u/.impeccable/usertest/sealed/ab12/a-sam-low.json")
+        );
+        assert_eq!(
+            s.result,
+            PathBuf::from("/home/u/.impeccable/usertest/sealed/ab12/a-sam-low.result.json")
         );
     }
 
     #[test]
-    fn within_rejects_escapes() {
-        let cwd = Path::new("/work");
-        let session = Path::new("/work/.impeccable/usertest/s1");
-        assert!(within(
-            &absolute(cwd, Path::new(".impeccable/usertest/s1/auth.json")),
-            session
+    fn session_id_is_created_once_and_shared() {
+        let dir = std::env::temp_dir().join(format!("ut-session-{}", random_token()));
+        let a = session_id(&dir, true).unwrap();
+        assert_eq!(a.len(), 16);
+        assert_eq!(session_id(&dir, true).unwrap(), a);
+        assert_eq!(session_id(&dir, false).unwrap(), a);
+        let _ = std::fs::remove_dir_all(&dir);
+        assert!(session_id(&dir, false).is_err());
+    }
+
+    #[test]
+    fn state_files_stay_out_of_runs() {
+        let session = Path::new("/w/.impeccable/usertest/s1");
+        let auth = Path::new("/h/.impeccable/usertest/auth");
+        assert!(state_file_allowed(
+            &session.join("signin.json"),
+            session,
+            auth
         ));
-        assert!(!within(
-            &absolute(cwd, Path::new(".impeccable/usertest/s1/../../x.json")),
-            session
+        assert!(state_file_allowed(&auth.join("shop.json"), session, auth));
+        assert!(!state_file_allowed(
+            &session.join("a-sam-low/trace.json"),
+            session,
+            auth
         ));
-        assert!(!within(session, session));
+        assert!(!state_file_allowed(
+            &session.join("session.json"),
+            session,
+            auth
+        ));
+        assert!(!state_file_allowed(
+            &session.join("notes.txt"),
+            session,
+            auth
+        ));
+        let cwd = Path::new("/w");
+        let escape = absolute(cwd, Path::new(".impeccable/usertest/s1/../../x.json"));
+        assert!(!state_file_allowed(&escape, session, auth));
+    }
+
+    #[test]
+    fn run_names_are_one_segment() {
+        assert!(is_simple_name("a-sam-low-r2"));
+        assert!(!is_simple_name("../x") && !is_simple_name("a/b") && !is_simple_name(".."));
+    }
+
+    #[test]
+    fn private_writes_replace_and_restrict() {
+        let dir = std::env::temp_dir().join(format!("ut-private-{}", random_token()));
+        std::fs::create_dir_all(&dir).unwrap();
+        let f = dir.join("x.json");
+        write_private(&f, "one").unwrap();
+        write_private(&f, "two").unwrap();
+        assert_eq!(std::fs::read_to_string(&f).unwrap(), "two");
+        #[cfg(unix)]
+        {
+            use std::os::unix::fs::PermissionsExt;
+            assert_eq!(
+                std::fs::metadata(&f).unwrap().permissions().mode() & 0o777,
+                0o600
+            );
+        }
+        let _ = std::fs::remove_dir_all(&dir);
     }
 
     #[test]

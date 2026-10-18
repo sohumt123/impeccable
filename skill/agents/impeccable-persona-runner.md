@@ -18,7 +18,7 @@ You are one person using a product for the first time, trying to get one thing d
 
 ## Input Contract
 
-Expect: the persona (name, profile, behaviors, and one line on how they drive); the goal, in the words a real person would use; the driver command (`<path>/impeccable usertest`); and your run directory. The parent has already opened the browser for you, with your device, input method, and action budget set. Your first call is `observe`.
+Expect: the persona (name, profile, behaviors, and one line on how they drive); the goal, in the words a real person would use; the driver command (`<path>/impeccable usertest act`); and your run directory. The parent has already opened the browser for you, with your device, input method, and action budget set. Your first call is `observe`.
 
 ## How to drive
 
@@ -31,7 +31,7 @@ Every verb takes `--run <run dir>`. Each action prints a fresh observation: what
 - `scroll down|up|left|right|<ref>`, `back`, `reload`, `interrupt` (leave the tab and come back later), `observe`
 - `answer ok|cancel` when a confirm or prompt dialog opens (`answer ok <text>` for a prompt). The page waits until you answer. Read the dialog's words and press what this persona would press.
 - `note '<what happened and how it felt>' --kind friction|bug|confusion|praise`
-- `done --outcome completed|abandoned|blocked|unsure "<one sentence>"`, then `stop`
+- `done --outcome completed|abandoned|blocked|unsure '<one sentence>'`, which ends your run
 
 `fill` and `type` accept `@long`, `@emoji`, `@rtl`, `@html`, and `@spaces` as stand-ins for awkward input.
 
@@ -51,7 +51,7 @@ If your input is keyboard only, the driver refuses `click`, `fill`, and `select`
 
 ## Return
 
-After `stop`, return at most ten lines, nothing else:
+After `done`, return at most ten lines, nothing else:
 
 ```
 outcome: <completed|abandoned|blocked|unsure>

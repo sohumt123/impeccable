@@ -1,0 +1,7 @@
+{
+  "stdout": "",
+  "stderr": "<WS>/.impeccable/usertest/shop/20261018-1200 is not a usertest session (no session.json; `usertest start` writes one)\n",
+  "exit": 1,
+  "signal": null,
+  "files": {}
+}

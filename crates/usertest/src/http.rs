@@ -1,6 +1,8 @@
-//! The control channel between `impeccable usertest <verb>` and the run's
+//! The control channel between the `impeccable usertest` client and a run's
 //! daemon: one HTTP/1.1 POST per verb on 127.0.0.1, closed after the reply.
-//! Hand-rolled because it carries one JSON body each way and nothing else.
+//! It carries one JSON body each way. `crates/live`'s server core does more
+//! (chunked bodies, streaming, CORS) but would bring live mode's dependencies
+//! into this crate, so this keeps the same limits in a few lines instead.
 
 use std::io::{BufRead, BufReader, Read, Write};
 use std::net::TcpStream;
@@ -8,6 +10,8 @@ use std::time::Duration;
 
 /// The largest request body the daemon accepts (verbs carry a few KB).
 const MAX_BODY: usize = 1024 * 1024;
+/// The request line and headers, as in `crates/live/src/live_http.rs`.
+const MAX_HEAD_BYTES: u64 = 64 * 1024;
 
 pub struct Request {
     pub method: String,
@@ -26,7 +30,7 @@ impl Request {
 
 pub fn read_request(stream: &mut TcpStream) -> Option<Request> {
     let _ = stream.set_read_timeout(Some(Duration::from_secs(10)));
-    let mut reader = BufReader::new(stream.try_clone().ok()?);
+    let mut reader = BufReader::new(stream.try_clone().ok()?).take(MAX_HEAD_BYTES);
     let mut line = String::new();
     reader.read_line(&mut line).ok()?;
     let method = line.split_whitespace().next()?.to_string();
@@ -55,8 +59,9 @@ pub fn read_request(stream: &mut TcpStream) -> Option<Request> {
     if len > MAX_BODY {
         return None;
     }
+    // The head budget does not apply to the body, which has its own cap.
     let mut body = vec![0u8; len];
-    reader.read_exact(&mut body).ok()?;
+    reader.into_inner().read_exact(&mut body).ok()?;
     Some(Request {
         method,
         headers,

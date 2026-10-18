@@ -1,0 +1,7 @@
+{
+  "stdout": "",
+  "stderr": "--input must be pointer or keyboard, got \"keyboard-only\"\n",
+  "exit": 1,
+  "signal": null,
+  "files": {}
+}
