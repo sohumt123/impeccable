@@ -408,8 +408,6 @@ describe('skill scripts payload', () => {
       'lib/image-metrics.mjs',
       'lib/png.mjs',
       'lib/raster.mjs',
-      // The usertest browser driver: a Playwright daemon per persona run.
-      'usertest-driver.mjs',
     ]);
     const stray = [...names].filter((n) =>
       (n.endsWith('.mjs') || n.startsWith('detector/') || n.startsWith('lib/')) && !allowedNodeScripts.has(n));

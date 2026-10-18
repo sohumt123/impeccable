@@ -11,11 +11,12 @@
   <button id="times">Show times</button> <p id="slots"></p>
   <x-greeting></x-greeting>
   <iframe title="Payment form" srcdoc="<button>Pay</button>" width="200" height="60"></iframe>
-  <div id="wide" style="min-width: 34rem; height: 20px"></div>
+  <div id="wide" style="min-width: 34rem; display: flex; justify-content: flex-end"><button id="far">Far button</button></div>
   <script>
     document.getElementById('del').addEventListener('click', () => {
       document.getElementById('out').textContent = confirm('Delete everything? This cannot be undone.') ? 'Deleted' : 'Kept';
     });
+    document.getElementById('far').addEventListener('click', () => (document.getElementById('out').textContent = 'Far reached'));
     document.getElementById('times').addEventListener('click', async () => {
       const out = document.getElementById('slots');
       out.textContent = 'Nothing available';

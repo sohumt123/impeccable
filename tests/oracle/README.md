@@ -49,6 +49,11 @@ functions; see `vectors/README.md`.
   context overrides, `CI`) is pinned per case so the recording host does not
   leak into goldens.
 
+- `cases/usertest.mjs`: `usertest`, browser-free paths only: usage, the
+  refusals that come before a browser launches, `stopall` over a stale
+  record, and `summarize` over a session its `setup` writes. Driving a page
+  is covered by `tests/usertest-e2e.test.mjs`.
+
 ## Normalizations
 
 Beyond paths and ISO timestamps, `normalize()` masks these run- or

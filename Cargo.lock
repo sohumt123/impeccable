@@ -539,6 +539,7 @@ dependencies = [
  "impeccable-html",
  "impeccable-live",
  "impeccable-skills",
+ "impeccable-usertest",
  "serde_json",
 ]
 
@@ -723,6 +724,17 @@ dependencies = [
  "ureq",
  "url",
  "zip",
+]
+
+[[package]]
+name = "impeccable-usertest"
+version = "0.1.5"
+dependencies = [
+ "base64",
+ "getrandom 0.2.17",
+ "impeccable-browser",
+ "impeccable-common",
+ "serde_json",
 ]
 
 [[package]]

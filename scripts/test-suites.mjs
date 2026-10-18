@@ -246,21 +246,21 @@ export const SUITES = {
     ],
   },
   'usertest-e2e': {
-    description: 'Scripted Playwright walk of the usertest driver against the fixture shop: effects, dead clicks, keyboard-only refusal, budget, summarize.',
+    description: 'Scripted walk of `impeccable usertest` against the fixture shop in an installed Chrome: effects, dead clicks, dialogs, keyboard-only refusal, budget, summarize.',
     optIn: true,
-    needsPlaywright: true,
     triggers: [
       ...COMMON_INFRA_PATTERNS,
-      /^skill\/scripts\/usertest-driver\.mjs$/,
+      /^crates\/usertest\//,
+      /^crates\/browser\/src\/cdp\.rs$/,
       /^tests\/fixtures\/usertest\//,
-      /^tests\/usertest-driver\.test\.mjs$/,
+      /^tests\/usertest-e2e\.test\.mjs$/,
     ],
     commands: [
       {
         runner: 'node',
         timeoutMs: 300000,
         forceExit: true,
-        files: ['tests/usertest-driver.test.mjs'],
+        files: ['tests/usertest-e2e.test.mjs'],
       },
     ],
   },

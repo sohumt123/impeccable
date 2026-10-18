@@ -272,6 +272,29 @@ impl Browser {
         }
     }
 
+    /// Raw protocol access for a verb that drives a page interactively
+    /// (`impeccable usertest`) and has to watch every event itself, such as a
+    /// JavaScript dialog that blocks the command in flight. Writes one
+    /// command and returns its id without waiting; the reply arrives through
+    /// [`Browser::next_message`].
+    pub fn post_raw(
+        &mut self,
+        session_id: Option<&str>,
+        method: &str,
+        params: Value,
+    ) -> CdpResult<u64> {
+        self.conn.post(session_id, method, params)
+    }
+
+    /// The next protocol message (a reply or an event), queued events first,
+    /// or `None` once `deadline` passes.
+    pub fn next_message(&mut self, deadline: Instant) -> CdpResult<Option<Value>> {
+        if let Some(ev) = self.conn.events.pop_front() {
+            return Ok(Some(ev));
+        }
+        self.conn.read_one(deadline)
+    }
+
     /// `browser.newPage()`: a fresh target in the default context, attached
     /// flat, with puppeteer's page setup applied.
     pub fn new_page(&mut self) -> CdpResult<Page<'_>> {

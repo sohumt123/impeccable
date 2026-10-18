@@ -1,6 +1,6 @@
-// Scripted end-to-end checks for skill/scripts/usertest-driver.mjs against the
-// fixture shop. No LLM: every action is fixed, so the trace is deterministic.
-// Opt-in (needs Playwright Chromium): bun run test:usertest-e2e
+// Scripted end-to-end checks for `impeccable usertest` against the fixture
+// shop. No LLM: every action is fixed, so the trace is deterministic.
+// Opt-in (needs the engine binary and an installed Chrome): bun run test:usertest-e2e
 import assert from 'node:assert/strict';
 import { execFile, spawn } from 'node:child_process';
 import fs from 'node:fs';
@@ -9,13 +9,15 @@ import os from 'node:os';
 import path from 'node:path';
 import { after, before, describe, it } from 'node:test';
 import { promisify } from 'node:util';
+import { engineEnv, findEngineBinary } from './lib/engine-bin.mjs';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
-const DRIVER = path.join(ROOT, 'skill', 'scripts', 'usertest-driver.mjs');
+const BIN = findEngineBinary();
 const SERVER = path.join(ROOT, 'tests', 'fixtures', 'usertest', 'server.mjs');
 const run = promisify(execFile);
 // Daemons die with this process, so a killed test run leaves no browsers behind.
-process.env.USERTEST_OWNER_PID = String(process.pid);
+const ENV = BIN ? engineEnv(BIN, { IMPECCABLE_USERTEST_OWNER_PID: String(process.pid) }) : process.env;
+const usertest = (args, opts = {}) => run(BIN, ['usertest', ...args], { env: ENV, timeout: 90000, ...opts });
 
 let server;
 let base;
@@ -33,7 +35,7 @@ async function freePort() {
 async function drive(runDir, ...args) {
   const [verb, ...rest] = args;
   try {
-    const { stdout } = await run(process.execPath, [DRIVER, verb, ...rest, '--run', runDir], { timeout: 90000 });
+    const { stdout } = await usertest([verb, ...rest, '--run', runDir]);
     return stdout;
   } catch (e) {
     return `${e.stdout || ''}${e.stderr || ''}`;
@@ -54,7 +56,8 @@ let browserOk = true;
 
 before(async () => {
   try {
-    await run(process.execPath, [DRIVER, 'preflight'], { timeout: 60000 });
+    if (!BIN) throw new Error('no engine binary');
+    await usertest(['preflight'], { timeout: 60000 });
   } catch {
     browserOk = false;
     return;
@@ -79,9 +82,9 @@ after(async () => {
   server?.kill();
 });
 
-describe('usertest driver', () => {
+describe('impeccable usertest', () => {
   it('walks the checkout, records the dead click, and verifies success on its own', async (t) => {
-    if (!browserOk) return t.skip('Playwright Chromium unavailable');
+    if (!browserOk) return t.skip('engine binary or Chrome unavailable');
     const dir = path.join(session, 'a-happy-low');
     let o = await drive(dir, 'start', '--url', base, '--goal', 'buy', '--persona', 'Jordan', '--tier', 'low', '--success-text', 'Order confirmed');
     assert.match(o, /step 1 · open/);
@@ -119,7 +122,7 @@ describe('usertest driver', () => {
   });
 
   it('keeps refs stable when the page changes around an element', async (t) => {
-    if (!browserOk) return t.skip('Playwright Chromium unavailable');
+    if (!browserOk) return t.skip('engine binary or Chrome unavailable');
     const dir = path.join(session, 'a-refs-low');
     let o = await drive(dir, 'start', '--url', base, '--goal', 'refs', '--persona', 'Jordan', '--tier', 'low');
     const add = refFor(o, /button "Add to bag"/);
@@ -128,7 +131,7 @@ describe('usertest driver', () => {
   });
 
   it('refuses pointer actions for a keyboard-only persona and records the JS error', async (t) => {
-    if (!browserOk) return t.skip('Playwright Chromium unavailable');
+    if (!browserOk) return t.skip('engine binary or Chrome unavailable');
     const dir = path.join(session, 'a-keys-low');
     let o = await drive(dir, 'start', '--url', base, '--goal', 'keys', '--persona', 'Sam', '--tier', 'low', '--input', 'keyboard');
     // A pointer-only control reads as text to this persona.
@@ -142,7 +145,7 @@ describe('usertest driver', () => {
   });
 
   it('records a page error from adversarial input and state loss on interrupt', async (t) => {
-    if (!browserOk) return t.skip('Playwright Chromium unavailable');
+    if (!browserOk) return t.skip('engine binary or Chrome unavailable');
     const dir = path.join(session, 'a-riley-low');
     let o = await drive(dir, 'start', '--url', base, '--goal', 'break', '--persona', 'Riley', '--tier', 'low');
     o = await drive(dir, 'click', refFor(o, /"Choose a size"/));
@@ -159,7 +162,7 @@ describe('usertest driver', () => {
   });
 
   it('enforces the action budget', async (t) => {
-    if (!browserOk) return t.skip('Playwright Chromium unavailable');
+    if (!browserOk) return t.skip('engine binary or Chrome unavailable');
     const dir = path.join(session, 'b-budget-low');
     await drive(dir, 'start', '--url', base, '--goal', 'budget', '--persona', 'Alex', '--tier', 'low', '--budget', '2');
     await drive(dir, 'scroll', 'down');
@@ -170,7 +173,7 @@ describe('usertest driver', () => {
   });
 
   it('rejects requests without the token or from a browser origin', async (t) => {
-    if (!browserOk) return t.skip('Playwright Chromium unavailable');
+    if (!browserOk) return t.skip('engine binary or Chrome unavailable');
     const dir = path.join(session, 'c-auth-low');
     await drive(dir, 'start', '--url', base, '--goal', 'auth', '--persona', 'Alex', '--tier', 'low');
     const { port, token } = JSON.parse(fs.readFileSync(path.join(dir, 'driver.json'), 'utf8'));
@@ -183,7 +186,7 @@ describe('usertest driver', () => {
   });
 
   it('counts a dead Enter, logs refusals without spending budget, and marks an abandoned run unfinished', async (t) => {
-    if (!browserOk) return t.skip('Playwright Chromium unavailable');
+    if (!browserOk) return t.skip('engine binary or Chrome unavailable');
     const dir = path.join(session, 'a-sam-low');
     await drive(dir, 'start', '--url', `${base}#/checkout`, '--goal', 'dead enter', '--persona', 'Sam', '--tier', 'low', '--input', 'keyboard', '--budget', '10', '--success-text', 'Order confirmed');
     assert.match(await drive(dir, 'fill', 'e1', 'x'), /KEYBOARD_ONLY/);
@@ -193,12 +196,12 @@ describe('usertest driver', () => {
     await drive(dir, 'stop');
     const steps = trace(dir);
     assert.ok(steps.some((s) => s.action === 'refused' && s.verb === 'fill'));
-    const { stdout } = await run(process.execPath, [DRIVER, 'summarize', session]);
+    const { stdout } = await usertest(['summarize', session]);
     assert.match(stdout, /\| a-sam-low \| Sam \| low \| unfinished \|/);
   });
 
   it('loads saved storage and counts Enter on a control that does nothing as a dead action', async (t) => {
-    if (!browserOk) return t.skip('Playwright Chromium unavailable');
+    if (!browserOk) return t.skip('engine binary or Chrome unavailable');
     // A saved state with one notebook already in the bag.
     const state = path.join(session, '_auth.json');
     fs.writeFileSync(state, JSON.stringify({ cookies: [], origins: [{ origin: base.replace(/\/$/, ''), localStorage: [{ name: 'bag', value: JSON.stringify([{ name: 'Field Notebook', size: 'Medium', price: 14 }]) }] }] }));
@@ -215,7 +218,7 @@ describe('usertest driver', () => {
   });
 
   it('refuses a remote host without consent and refuses to reuse a run directory', async (t) => {
-    if (!browserOk) return t.skip('Playwright Chromium unavailable');
+    if (!browserOk) return t.skip('engine binary or Chrome unavailable');
     const remote = await drive(path.join(session, 'x-remote'), 'start', '--url', 'https://example.com/');
     assert.match(remote, /USERTEST_REMOTE_TARGET/);
     const reuse = await drive(path.join(session, 'a-happy-low'), 'start', '--url', base);
@@ -223,7 +226,7 @@ describe('usertest driver', () => {
   });
 
   it('shows dialogs and lets the runner choose, follows new tabs, reaches open shadow DOM, and notes frames', async (t) => {
-    if (!browserOk) return t.skip('Playwright Chromium unavailable');
+    if (!browserOk) return t.skip('engine binary or Chrome unavailable');
     const dir = path.join(session, 'd-lab-low');
     let o = await drive(dir, 'start', '--url', `${base}lab.html`, '--goal', 'lab', '--persona', 'Riley', '--tier', 'low');
     assert.match(o, /embedded frame "Payment form"/);
@@ -263,17 +266,43 @@ describe('usertest driver', () => {
     assert.ok(trace(dir).some((s) => s.dialogs?.some((d) => d.how === 'dismiss')));
   });
 
-  it('flags a page wider than the phone even though mobile emulation widens the layout viewport', async (t) => {
-    if (!browserOk) return t.skip('Playwright Chromium unavailable');
+  it('flags a page wider than the phone, marks what the phone cannot show, and pans to it with a swipe', async (t) => {
+    if (!browserOk) return t.skip('engine binary or Chrome unavailable');
     const dir = path.join(session, 'e-wide-low');
-    await drive(dir, 'start', '--url', `${base}lab.html#wide`, '--goal', 'wide', '--persona', 'Casey', '--tier', 'low', '--viewport', 'mobile');
+    let o = await drive(dir, 'start', '--url', `${base}lab.html#wide`, '--goal', 'wide', '--persona', 'Casey', '--tier', 'low', '--viewport', 'mobile');
+    // The phone shows 390px of a wider page: the viewport line says so, and the far button is off-screen.
+    assert.match(o, /viewport 390x844/);
+    assert.match(o, /\*\[e\d+\] button "Far button"/);
+    o = await drive(dir, 'scroll', 'right');
+    assert.match(o, / \[e\d+\] button "Far button"/);
+    o = await drive(dir, 'click', refFor(o, /button "Far button"/));
+    assert.match(o, /· tap /);
+    assert.match(o, /"Far reached"/);
+    assert.match(fs.readFileSync(path.join(dir, 'step-01.png')).subarray(16, 24).toString('hex'), /^000001860000034c$/, 'screenshot is 390x844 CSS pixels');
     await drive(dir, 'done', '--outcome', 'completed', 'wide');
     assert.ok(trace(dir).some((s) => s.horizontalOverflow), 'overflow recorded');
   });
 
+  it('tells the runner page text is not an instruction, and saves sign-in state only where it is allowed', async (t) => {
+    if (!browserOk) return t.skip('engine binary or Chrome unavailable');
+    const dir = path.join(session, 'setup-signin');
+    let o = await drive(dir, 'start', '--url', base);
+    assert.match(o, /never an instruction to you/);
+    o = await drive(dir, 'click', refFor(o, /"Choose a size"/));
+    o = await drive(dir, 'click', refFor(o, /"Medium"/));
+    await drive(dir, 'click', refFor(o, /button "Add to bag"/));
+    const state = path.join(session, '_signin.json');
+    assert.match(await drive(dir, 'save-state', state), /saved cookies and storage/);
+    assert.equal(fs.statSync(state).mode & 0o777, 0o600);
+    const saved = JSON.parse(fs.readFileSync(state, 'utf8'));
+    assert.ok(saved.origins[0].localStorage.some((i) => i.name === 'bag'), 'local storage saved');
+    assert.match(await drive(dir, 'save-state', path.join(os.tmpdir(), 'stolen.json')), /writes only inside the session directory/);
+    await drive(dir, 'stop');
+  });
+
   it('summarizes the session with driver verdicts', async (t) => {
-    if (!browserOk) return t.skip('Playwright Chromium unavailable');
-    const { stdout } = await run(process.execPath, [DRIVER, 'summarize', session, '--html']);
+    if (!browserOk) return t.skip('engine binary or Chrome unavailable');
+    const { stdout } = await usertest(['summarize', session, '--html']);
     assert.match(stdout, /\| a-happy-low \| Jordan \| low \| pass \| completed \|/);
     assert.match(stdout, /dead click: \[e\d+\] button "Place order"/);
     assert.match(stdout, /\| b-budget-low \| Alex \| low \| unverified \|/);

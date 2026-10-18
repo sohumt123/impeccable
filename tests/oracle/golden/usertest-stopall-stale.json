@@ -1,0 +1,7 @@
+{
+  "stdout": "stopped 0 driver(s), cleared 1 stale record(s)\n",
+  "stderr": "",
+  "exit": 0,
+  "signal": null,
+  "files": {}
+}

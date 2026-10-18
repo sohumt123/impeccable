@@ -32,6 +32,8 @@ crates/
   detect       `impeccable detect`: file walk, config, ignores, output, regex engine
   html         the static HTML engine: parser, cascade, static DOM, rule adapters
   browser      the URL engine: Chrome discovery, CDP, snapshot, visual pass
+  usertest     `impeccable usertest`: the per-run browser daemon persona runners
+               drive (reuses browser's discovery, launch, and raw CDP access)
   foundation   JS-semantics helpers, color, findings, the rule registry, inline
                ignores, the Dom trait, SnapshotDom, and the plain-data types
                every check takes in and hands back

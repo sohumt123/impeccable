@@ -1,0 +1,7 @@
+{
+  "stdout": "",
+  "stderr": "USERTEST_REMOTE_TARGET: shop.example.com is not local. Runners take real actions (orders, emails, deletes). Get the user's explicit consent for this host, then pass --allow-remote.\n",
+  "exit": 4,
+  "signal": null,
+  "files": {}
+}
