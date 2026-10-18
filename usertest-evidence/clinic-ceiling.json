@@ -1,0 +1,27 @@
+{
+ "url": "http://127.0.0.1:4792/",
+ "goals": {
+  "a": {
+   "text": "I want to book my yearly physical, a routine check-up, with a nurse practitioner. Any weekday morning works for me. My name is Priya Raman, born March 14, 1988. My mobile is (415) 555-0137 and my email is priya.raman@example.com.",
+   "successText": "Your appointment is confirmed"
+  },
+  "b": {
+   "text": "I have a follow-up appointment at Harbor Clinic that I can't make any more, so I want to cancel it. My booking reference is HC-4471 and the booking is under Morgan Lee. The reason is a schedule conflict.",
+   "successText": "Appointment HC-4471 has been cancelled"
+  }
+ },
+ "cells": [
+  {
+   "goal": "a",
+   "persona": "Sam",
+   "tier": "high",
+   "name": "a-sam-high"
+  },
+  {
+   "goal": "a",
+   "persona": "Sam",
+   "tier": "high",
+   "name": "a-sam-high-n2"
+  }
+ ]
+}

@@ -1,0 +1,63 @@
+{
+ "url": "http://127.0.0.1:4791/",
+ "goals": {
+  "a": {
+   "text": "Buy one Medium Field Notebook with standard shipping. You got a promo code by email: welcome10. Make up a name and address.",
+   "successText": "Order confirmed"
+  },
+  "b": {
+   "text": "Change your account email to jordan@example.com.",
+   "successText": "Signed in as jordan@example.com"
+  }
+ },
+ "cells": [
+  {
+   "goal": "a",
+   "persona": "Sam",
+   "tier": "high",
+   "name": "a-sam-high"
+  },
+  {
+   "goal": "a",
+   "persona": "Sam",
+   "tier": "high",
+   "name": "a-sam-high-n2"
+  },
+  {
+   "goal": "b",
+   "persona": "Alex",
+   "tier": "high",
+   "name": "b-alex-high"
+  },
+  {
+   "goal": "b",
+   "persona": "Alex",
+   "tier": "high",
+   "name": "b-alex-high-n2"
+  },
+  {
+   "goal": "b",
+   "persona": "Jordan",
+   "tier": "high",
+   "name": "b-jordan-high"
+  },
+  {
+   "goal": "b",
+   "persona": "Jordan",
+   "tier": "high",
+   "name": "b-jordan-high-n2"
+  },
+  {
+   "goal": "b",
+   "persona": "Sam",
+   "tier": "high",
+   "name": "b-sam-high"
+  },
+  {
+   "goal": "b",
+   "persona": "Sam",
+   "tier": "high",
+   "name": "b-sam-high-n2"
+  }
+ ]
+}

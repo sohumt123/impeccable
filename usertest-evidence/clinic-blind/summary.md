@@ -1,4 +1,4 @@
-# Usertest summary: 32 runs
+# Usertest summary: 28 runs
 
 Verdicts come from the driver's success check, not the runner's claim:
 
@@ -13,482 +13,404 @@ Verdicts come from the driver's success check, not the runner's claim:
 
 | run | persona | tier | verdict | claimed | met at step | actions | dead actions | js/network errors | refused |
 |---|---|---|---|---|---|---|---|---|---|
-| a-casey-high | Casey | high | fail | abandoned | - | 12 | 1 | 0 | 0 |
-| a-casey-high-n2 | Casey | high | fail | abandoned | - | 12 | 1 | 0 | 0 |
-| a-casey-low | Casey | low | fail | abandoned | - | 11 | 0 | 0 | 0 |
-| a-casey-low-n2 | Casey | low | fail | abandoned | - | 10 | 1 | 0 | 0 |
-| a-casey-mid | Casey | mid | fail | blocked | - | 14 | 2 | 0 | 0 |
-| a-casey-mid-n2 | Casey | mid | fail | blocked | - | 10 | 2 | 0 | 0 |
-| a-jordan-low | Jordan | low | pass | completed | 19 | 17 | 1 | 0 | 0 |
-| a-jordan-low-n2 | Jordan | low | pass | completed | 19 | 17 | 1 | 0 | 0 |
-| a-jordan-mid | Jordan | mid | pass | completed | 18 | 16 | 1 | 0 | 0 |
-| a-jordan-mid-n2 | Jordan | mid | pass | completed | 18 | 16 | 1 | 0 | 0 |
-| a-riley-low | Riley | low | pass | completed | 34 | 32 | 2 | 0 | 0 |
-| a-riley-low-n2 | Riley | low | pass | completed | 33 | 31 | 1 | 0 | 0 |
-| a-riley-mid | Riley | mid | pass | completed | 32 | 30 | 0 | 0 | 0 |
-| a-riley-mid-n2 | Riley | mid | pass | completed | 32 | 30 | 1 | 0 | 0 |
-| a-sam-high | Sam | high | fail | blocked | - | 31 | 3 | 0 | 0 |
-| a-sam-high-n2 | Sam | high | fail | blocked | - | 30 | 2 | 0 | 0 |
-| a-sam-low | Sam | low | fail | abandoned | - | 22 | 1 | 18 | 0 |
-| a-sam-low-n2 | Sam | low | fail | abandoned | - | 22 | 1 | 26 | 1 |
-| a-sam-mid | Sam | mid | fail | blocked | - | 28 | 1 | 0 | 1 |
-| a-sam-mid-n2 | Sam | mid | fail | blocked | - | 28 | 4 | 0 | 1 |
+| a-casey-low | Casey | low | pass | completed | 25 | 23 | 0 | 0 | 1 |
+| a-casey-low-n2 | Casey | low | fail | abandoned | - | 20 | 0 | 0 | 0 |
+| a-casey-mid | Casey | mid | pass | completed | 21 | 19 | 0 | 0 | 1 |
+| a-casey-mid-n2 | Casey | mid | fail | abandoned | - | 21 | 0 | 0 | 1 |
+| a-jordan-low | Jordan | low | pass | completed | 22 | 20 | 0 | 0 | 1 |
+| a-jordan-low-n2 | Jordan | low | pass | completed | 24 | 22 | 2 | 0 | 1 |
+| a-jordan-mid | Jordan | mid | pass | completed | 19 | 17 | 0 | 0 | 1 |
+| a-jordan-mid-n2 | Jordan | mid | pass | completed | 20 | 18 | 0 | 0 | 1 |
+| a-riley-low | Riley | low | pass | completed | 28 | 26 | 0 | 0 | 1 |
+| a-riley-low-n2 | Riley | low | pass | completed | 32 | 30 | 0 | 0 | 1 |
+| a-riley-mid | Riley | mid | fail | blocked | - | 34 | 0 | 0 | 2 |
+| a-riley-mid-n2 | Riley | mid | pass | completed | 35 | 33 | 0 | 0 | 1 |
+| a-sam-low | Sam | low | fail | abandoned | - | 31 | 1 | 0 | 1 |
+| a-sam-low-n2 | Sam | low | fail | abandoned | - | 20 | 1 | 10 | 0 |
+| a-sam-mid | Sam | mid | fail | blocked | - | 27 | 0 | 0 | 1 |
+| a-sam-mid-n2 | Sam | mid | fail | blocked | - | 33 | 0 | 18 | 1 |
 
 ## Goal: I have a follow-up appointment at Harbor Clinic that I can't make any more, so I want to cancel it. My booking reference is HC-4471 and the booking is under Morgan Lee. The reason is a schedule conflict.
 
 | run | persona | tier | verdict | claimed | met at step | actions | dead actions | js/network errors | refused |
 |---|---|---|---|---|---|---|---|---|---|
-| b-alex-low | Alex | low | pass | completed | 12 | 9 | 0 | 2 | 0 |
-| b-alex-low-n2 | Alex | low | pass | completed | 10 | 7 | 0 | 0 | 0 |
+| b-alex-low | Alex | low | fail | unsure | - | 9 | 0 | 2 | 0 |
+| b-alex-low-n2 | Alex | low | pass | completed | 13 | 10 | 0 | 4 | 0 |
 | b-alex-mid | Alex | mid | pass | completed | 10 | 7 | 0 | 0 | 0 |
 | b-alex-mid-n2 | Alex | mid | pass | completed | 10 | 7 | 0 | 0 | 0 |
-| b-jordan-low | Jordan | low | pass | completed | 12 | 9 | 1 | 0 | 0 |
-| b-jordan-low-n2 | Jordan | low | pass | completed | 10 | 7 | 0 | 0 | 0 |
+| b-jordan-low | Jordan | low | pass | completed | 12 | 9 | 0 | 2 | 0 |
+| b-jordan-low-n2 | Jordan | low | pass | completed | 14 | 11 | 1 | 2 | 0 |
 | b-jordan-mid | Jordan | mid | pass | completed | 10 | 7 | 0 | 0 | 0 |
-| b-jordan-mid-n2 | Jordan | mid | pass | completed | 10 | 7 | 0 | 0 | 0 |
-| b-sam-low | Sam | low | pass | completed | 33 | 30 | 1 | 2 | 0 |
-| b-sam-low-n2 | Sam | low | fail | abandoned | - | 18 | 0 | 2 | 0 |
-| b-sam-mid | Sam | mid | pass | completed | 37 | 34 | 0 | 0 | 1 |
+| b-jordan-mid-n2 | Jordan | mid | pass-unclaimed | none | 10 | 7 | 0 | 0 | 0 |
+| b-sam-low | Sam | low | pass | completed | 35 | 32 | 0 | 2 | 0 |
+| b-sam-low-n2 | Sam | low | pass | completed | 26 | 23 | 1 | 0 | 0 |
+| b-sam-mid | Sam | mid | pass | completed | 25 | 22 | 0 | 0 | 1 |
 | b-sam-mid-n2 | Sam | mid | pass | completed | 25 | 22 | 0 | 0 | 1 |
 
 ## Evidence by run
 
-### a-casey-high (Casey, high, mobile, pointer): fail
-runner: Picked an NP and a 9 AM slot but the Continue button would not respond to three taps, so I gave up.
-- step 4 runner confusion: Wanted a yearly physical. Annual Wellness Visit sounded like exactly that so I picked it. The explanation is hidden behind a small link I did not open.
+### a-casey-low (Casey, low, mobile, pointer): pass
+runner: Booked a Preventive exam with Dana Whitfield NP on Tuesday Oct 20 at 9:00 AM, confirmation HC-5201 shown and emailed.
 - step 6 page is 564px wide on a mobile screen; it scrolls sideways
-- step 6 runner bug: The date card runs off the right edge of my phone and I cannot see a Continue button, only Back. The page looks broken.
-- step 7 simulated leaving mid-flow: page was unloaded and reopened at the same URL
 - step 8 shown while loading (2.0s), then replaced: "No appointments available on this date."
-- step 8 runner bug: Picked Oct 20 which is a Tuesday but it says Wednesday, October 20. Also it flashed No appointments available for two seconds before showing times, I almost left.
-- step 9 dead tap: [e65] button "9:00 AM"
-- step 9 action sits in the top of the screen, outside the thumb zone: [e65] button "9:00 AM"
-- step 10 action failed: tap [e60] button "Continue": locator.tap: Timeout 5000ms exceeded.
-- step 11 runner friction: Had to swipe sideways to find Continue, it was hidden off the right edge. My first tap on it failed.
-- step 12 action failed: tap [e60] button "Continue": locator.tap: Timeout 5000ms exceeded.
-- step 14 action failed: tap [e60] button "Continue": locator.tap: Timeout 5000ms exceeded.
-- step 14 runner friction: Tapped Continue three times after picking 9:00 AM and nothing happens. No message, no next step. I am done, I will just call the front desk.
-
-### a-casey-high-n2 (Casey, high, mobile, pointer): fail
-runner: Picked a nurse practitioner and a 9 AM slot but the Continue button sat off the edge of my phone screen and never responded to taps, so I gave up.
-- step 4 runner confusion: Visit type list says Annual Wellness Visit, which sounds exactly like my yearly physical so I picked it. The explanation is hidden behind a small link I would not tap.
-- step 6 page is 564px wide on a mobile screen; it scrolls sideways
-- step 7 simulated leaving mid-flow: page was unloaded and reopened at the same URL
-- step 7 runner bug: Date page is wider than my phone screen. The date box and card run off the right edge and I cannot see a Continue button, only Back.
-- step 8 shown while loading (2.0s), then replaced: "No appointments available on this date."
-- step 8 runner confusion: Picked Oct 19. For two seconds it said No appointments available, I almost gave up. Then times appeared but the heading says Tuesday October 19 when I thought the 19th was Monday. Which day am I booking?
-- step 9 dead tap: [e65] button "9:00 AM"
-- step 9 action sits in the top of the screen, outside the thumb zone: [e65] button "9:00 AM"
-- step 10 action failed: tap [e60] button "Continue": locator.tap: Timeout 5000ms exceeded.
-- step 12 action failed: tap [e60] button "Continue": locator.tap: Timeout 5000ms exceeded.
-- step 12 runner friction: Had to swipe sideways to even find Continue, then tapped it twice and nothing happened at all. No message. I am stuck on the time page.
-- step 14 action failed: tap [e60] button "Continue": locator.tap: Timeout 5000ms exceeded.
-- step 14 runner friction: Third tap on Continue, still nothing. Page is half off my screen and the button just does not respond. I will call the front desk instead.
-
-### a-casey-low (Casey, low, mobile, pointer): fail
-runner: Could not get a date into the date field after several tries, so I could not finish booking the physical.
-- step 6 page is 564px wide on a mobile screen; it scrolls sideways
-- step 9 runner friction: Date field opened a calendar but typing 10/19/2026 or 10192026 left the field empty. Only tap-friendly way is picking a day in the calendar, and the calendar days have no refs I can tap. Getting annoyed.
-- step 11 simulated leaving mid-flow: page was unloaded and reopened at the same URL
-- step 13 runner friction: Tried typing the date three different ways and the field stays blank. Calendar pops up but I cannot tap a day in it. I have no idea how to pick a date. I am giving up on this for now.
+- step 10 field labeled only by placeholder: e63 "MM/DD/YYYY"
+- step 10 control with no accessible name: e65 textbox
+- step 14 acted on an unlabeled control: [e65] textbox ""
+- step 15 shown while loading (1.6s), then replaced: "Book a visit Manage a booking"
+- step 15 simulated leaving mid-flow: page was unloaded and reopened at the same URL
+- step 15 field labeled only by placeholder: e83 "MM/DD/YYYY"
+- step 15 control with no accessible name: e85 textbox
+- step 15 runner bug: Came back to the form and every field was empty. Date, name, birthday and phone all gone. Really annoying when you are on the go and get interrupted.
+- step 19 acted on an unlabeled control: [e85] textbox ""
+- step 20 refused click: e89 is not on your screen (it is below what you can see); scroll to it first
+- step 22 runner friction: Mobile phone says Invalid input with no hint of what format it wants. I typed it the way I always write it, (415) 555-0137. Had to guess.
+- step 23 acted on an unlabeled control: [e85] textbox ""
+- step 25 shown while loading (1.2s), then replaced: "Booking..."
+- step 25 runner bug: Time slots said Available times for Wednesday, October 20, but the confirmation says Tuesday, October 20. Which is it? Made me pause on whether I picked the right day.
 
 ### a-casey-low-n2 (Casey, low, mobile, pointer): fail
-runner: Picked a visit type, date and 8:30 slot, but Continue would not respond to three taps because it sits off-screen to the right, so I gave up.
+runner: Booking stalled at the details step: the mobile phone field rejects every format I tried with Invalid input and gives no hint of the expected format.
 - step 6 page is 564px wide on a mobile screen; it scrolls sideways
 - step 7 shown while loading (2.0s), then replaced: "No appointments available on this date."
-- step 8 shown while loading (2.0s), then replaced: "No appointments available on this date."
-- step 8 simulated leaving mid-flow: page was unloaded and reopened at the same URL
-- step 9 dead tap: [e67] button "8:30 AM"
-- step 9 action sits in the top of the screen, outside the thumb zone: [e67] button "8:30 AM"
-- step 9 runner friction: The date and time card runs off the right edge of my phone screen. The times on the right are cut off and the date heading is clipped. Annoying one-handed.
-- step 10 action failed: tap [e76] button "Continue": locator.tap: Timeout 5000ms exceeded.
-- step 11 action failed: tap [e76] button "Continue": locator.tap: Timeout 5000ms exceeded.
-- step 11 runner bug: Tapped Continue twice and the tap just times out. The Continue button is off to the right, past the edge of the screen, so I cannot reach it with my thumb. No way to move forward from here yet.
-- step 12 action failed: tap [e76] button "Continue": locator.tap: Timeout 5000ms exceeded.
+- step 7 runner confusion: Picked 10/20/2026 and the heading says Wednesday, October 20. I thought that was a Tuesday. Not sure which one to trust.
+- step 11 shown while loading (3.0s), then replaced: "Book a visit Manage a booking"
+- step 11 simulated leaving mid-flow: page was unloaded and reopened at the same URL
+- step 13 field labeled only by placeholder: e89 "MM/DD/YYYY"
+- step 13 control with no accessible name: e91 textbox
+- step 17 acted on an unlabeled control: [e91] textbox ""
+- step 20 runner friction: Mobile phone says Invalid input after I typed (415) 555-0137. It does not say what format it wants. I have no idea what is wrong with it.
+- step 21 acted on an unlabeled control: [e91] textbox ""
+- step 22 acted on an unlabeled control: [e91] textbox ""
+- step 22 runner friction: Tried three ways to type my phone (with brackets, digits only, dashes). Each time it still says Invalid input. Nothing tells me what it wants. I give up on this.
 
-### a-casey-mid (Casey, mid, mobile, pointer): fail
-runner: Continue button on the date and time step would not respond to taps after three tries, so I could not get past step 2.
+### a-casey-mid (Casey, mid, mobile, pointer): pass
+runner: Booked preventive exam with Dana Whitfield NP, Mon Oct 19 9:00 AM, ref HC-5201.
 - step 6 page is 564px wide on a mobile screen; it scrolls sideways
-- step 8 shown while loading (2.0s), then replaced: "No appointments available on this date."
-- step 8 runner confusion: Date picked 10/19 but heading says Tuesday October 19; I thought that was Monday. Slightly confusing.
-- step 9 dead tap: [e47] button "9:00 AM"
-- step 9 action sits in the top of the screen, outside the thumb zone: [e47] button "9:00 AM"
-- step 10 shown while loading (2.0s), then replaced: "No appointments available on this date."
-- step 10 simulated leaving mid-flow: page was unloaded and reopened at the same URL
-- step 11 dead tap: [e68] button "9:00 AM"
-- step 11 action sits in the top of the screen, outside the thumb zone: [e68] button "9:00 AM"
-- step 12 action failed: tap [e76] button "Continue": locator.tap: Timeout 5000ms exceeded.
-- step 12 runner bug: Page is wider than my phone screen, content cut off on left; Continue tap timed out. 9:00 looks selected though.
-- step 13 action failed: tap [e76] button "Continue": locator.tap: Timeout 5000ms exceeded.
-- step 16 action failed: tap [e76] button "Continue": locator.tap: Timeout 5000ms exceeded.
+- step 7 shown while loading (2.0s), then replaced: "No appointments available on this date."
+- step 7 runner confusion: I typed Oct 19 and the page calls it Tuesday. Is the day wrong? Made me hesitate about trusting the date.
+- step 9 shown while loading (3.0s), then replaced: "Book a visit Manage a booking"
+- step 9 simulated leaving mid-flow: page was unloaded and reopened at the same URL
+- step 9 refused click: e76 is not on your screen (it is to the right of what you can see); scroll to it first
+- step 11 field labeled only by placeholder: e89 "MM/DD/YYYY"
+- step 11 control with no accessible name: e91 textbox
+- step 15 acted on an unlabeled control: [e91] textbox ""
+- step 18 runner friction: Phone number marked Invalid input with no hint on the format wanted. I typed it the normal way. Annoying on a phone.
+- step 19 acted on an unlabeled control: [e91] textbox ""
+- step 21 shown while loading (1.2s), then replaced: "Booking..."
 
 ### a-casey-mid-n2 (Casey, mid, mobile, pointer): fail
-runner: Could not get past the date and time step: Continue could not be tapped on the sideways-shifted page.
-- step 6 page is 564px wide on a mobile screen; it scrolls sideways
-- step 7 simulated leaving mid-flow: page was unloaded and reopened at the same URL
-- step 8 shown while loading (2.0s), then replaced: "No appointments available on this date."
-- step 8 runner confusion: Heading says Tuesday October 19 but I think the 19th is a Monday. Confusing which day I am booking.
-- step 9 dead tap: [e64] button "8:30 AM"
-- step 9 action sits in the top of the screen, outside the thumb zone: [e64] button "8:30 AM"
-- step 10 action failed: tap [e60] button "Continue": locator.tap: Timeout 5000ms exceeded.
-- step 11 action failed: tap [e60] button "Continue": locator.tap: Timeout 5000ms exceeded.
-- step 11 runner bug: Page is wider than the phone screen and sideways-shifted. Tapping Continue times out twice, cannot move on. Very frustrating.
-- step 12 dead press: [e64] button "8:30 AM"
+runner: Phone field rejected three formats with only Invalid input and no hint, so I could not reach review.
+- step 6 shown while loading (1.6s), then replaced: "Book a visit Manage a booking"
+- step 6 simulated leaving mid-flow: page was unloaded and reopened at the same URL
+- step 6 runner friction: Came back after interruption and my choices were wiped. Had to pick visit type and clinician again. Annoying.
+- step 9 page is 564px wide on a mobile screen; it scrolls sideways
+- step 10 shown while loading (2.0s), then replaced: "No appointments available on this date."
+- step 11 refused click: e71 is not on your screen (it is to the right of what you can see); scroll to it first
+- step 13 field labeled only by placeholder: e89 "MM/DD/YYYY"
+- step 13 control with no accessible name: e91 textbox
+- step 17 acted on an unlabeled control: [e91] textbox ""
+- step 20 runner friction: Phone says only Invalid input. No hint of what format it wants, and it is the format I normally type.
+- step 21 acted on an unlabeled control: [e91] textbox ""
+- step 22 acted on an unlabeled control: [e91] textbox ""
 
 ### a-jordan-low (Jordan, low, desktop, pointer): pass
-runner: Booked a Preventive exam with nurse practitioner Dana Whitfield for 8:30 AM on October 19, 2026, confirmation HC-5201, though the day of the week was shown inconsistently.
+runner: Booked a Preventive exam with a nurse practitioner for Oct 19 2026 at 9 AM, confirmation HC-5201 shown on screen.
 - step 8 shown while loading (2.0s), then replaced: "No appointments available on this date."
-- step 8 runner confusion: I typed 10/19/2026 and it now says the date is typed as 2026-10-19 and the heading says Tuesday, October 19. I thought the 19th was a Monday. Not sure which day I actually booked. Also it says With Dana Whitfield, NP, which is the nurse practitioner, good.
-- step 9 dead click: [e46] button "8:30 AM"
 - step 10 field labeled only by placeholder: e63 "MM/DD/YYYY"
 - step 10 control with no accessible name: e65 textbox
 - step 14 acted on an unlabeled control: [e65] textbox ""
-- step 16 runner friction: Clicked Continue and the Mobile phone box says Invalid input. I typed my number exactly as I was given it, (415) 555-0137. It does not say what format it wants or why this is wrong. Confusing.
-- step 17 acted on an unlabeled control: [e65] textbox ""
-- step 19 shown while loading (1.1s), then replaced: "Step 4 of 4", "1. Visit type", "2. Date and time"
-- step 19 runner confusion: The booking is confirmed with reference HC-5201. But the review page said Tuesday, October 19 and the confirmation says Monday, October 19. I do not know which day my appointment is on. I need to know this to not miss it.
+- step 15 refused click: e69 is not on your screen (it is below what you can see); scroll to it first
+- step 18 acted on an unlabeled control: [e65] textbox ""
+- step 22 shown while loading (1.1s), then replaced: "Booking..."
+- step 22 runner friction: Mobile phone said Invalid input with no hint of what format it wants. I typed it the same way I was given and then digits only, and still got Invalid input. I had no idea what to change.
+- step 22 runner confusion: Visit type list had Annual Wellness Visit and Preventive exam. I was not sure which was the yearly physical. Annual Wellness says Medicare Part B and I am not on Medicare, so I picked Preventive exam because it said routine check-up. The help text did not settle it.
+- step 22 runner confusion: I picked Tuesday October 19 at 9 AM from the times shown, but the confirmation says Monday October 19. I am not sure which day I actually booked.
 
 ### a-jordan-low-n2 (Jordan, low, desktop, pointer): pass
-runner: Booked a Preventive exam with a nurse practitioner on October 19, 2026 at 8:30 AM, confirmation HC-5201 emailed to me.
+runner: Booked a Preventive exam with a nurse practitioner for 9:00 AM on October 19, 2026, and got booking reference HC-5201, though the weekday shown differed between steps.
+- step 4 runner confusion: Two visit types sound like my yearly check-up. Annual Wellness Visit says yearly but mentions Medicare Part B, and I am not on Medicare, so I am not sure it is for me. Preventive exam says routine check-up, which is what I asked for. Nowhere says physical. I will go with Preventive exam.
+- step 5 dead click: [e22] combobox "Type of visit"
+- step 7 dead click: [e32] combobox "Who would you like to see?"
+- step 10 shown while loading (2.0s), then replaced: "No appointments available on this date."
+- step 12 field labeled only by placeholder: e63 "MM/DD/YYYY"
+- step 12 control with no accessible name: e65 textbox
+- step 16 acted on an unlabeled control: [e65] textbox ""
+- step 17 runner confusion: The mobile phone box had no label I could read, only an empty box after Mobile phone. I guessed it was the right one. Also the date picker said Tuesday, October 19 even though I typed the 19th, which I thought was a Monday. I am not sure which day I booked.
+- step 17 refused click: e69 is not on your screen (it is below what you can see); scroll to it first
+- step 19 runner friction: Clicked Continue and it says Invalid input under the phone box. I typed (415) 555-0137 exactly as given. I do not know what it wants. Maybe the brackets or dashes are wrong, and nothing says what format it expects.
+- step 20 acted on an unlabeled control: [e65] textbox ""
+- step 24 shown while loading (1.1s), then replaced: "Booking..."
+- step 24 runner bug: The confirmation says Monday, October 19, 2026 at 9:00 AM, but the review step said Tuesday, October 19. I cannot tell which day I actually booked, and that worries me.
+
+### a-jordan-mid (Jordan, mid, desktop, pointer): pass
+runner: Booked preventive exam with NP Dana Whitfield, Mon Oct 19 9:00 AM, ref HC-5201.
+- step 7 shown while loading (2.0s), then replaced: "No appointments available on this date."
+- step 7 runner confusion: I typed Monday Oct 19 but the heading says Tuesday, October 19. Which day is it really? Confusing, I am not sure I booked the right day.
+- step 9 field labeled only by placeholder: e63 "MM/DD/YYYY"
+- step 9 control with no accessible name: e65 textbox
+- step 13 acted on an unlabeled control: [e65] textbox ""
+- step 14 refused click: e69 is not on your screen (it is below what you can see); scroll to it first
+- step 16 runner friction: Phone says only Invalid input. I typed my number the normal way with brackets and dash-less. No example of the format shown. I do not know what to change.
+- step 17 acted on an unlabeled control: [e65] textbox ""
+- step 19 shown while loading (1.1s), then replaced: "Booking..."
+
+### a-jordan-mid-n2 (Jordan, mid, desktop, pointer): pass
+runner: Booked a Preventive exam with a nurse practitioner, Monday Oct 19 at 9:00 AM, reference HC-5201.
 - step 8 shown while loading (2.0s), then replaced: "No appointments available on this date."
-- step 8 runner confusion: I typed 2026-10-19 which I thought was a Monday, but the page says Tuesday, October 19. I am not sure which day is right, but any weekday morning works so I will pick a morning time.
-- step 9 dead click: [e46] button "8:30 AM"
+- step 8 runner confusion: I picked October 19 and the page says Tuesday, October 19. I thought that was a Monday. Confusing, not sure which day I am booking.
 - step 10 field labeled only by placeholder: e63 "MM/DD/YYYY"
 - step 10 control with no accessible name: e65 textbox
 - step 14 acted on an unlabeled control: [e65] textbox ""
-- step 16 runner friction: Clicked Continue and the mobile phone field says Invalid input. It does not say what format it wants. I typed (415) 555-0137 exactly as I was given it, so I do not know what is wrong.
-- step 17 acted on an unlabeled control: [e65] textbox ""
-- step 19 shown while loading (1.1s), then replaced: "Step 4 of 4", "1. Visit type", "2. Date and time"
-- step 19 runner confusion: The confirmation says Monday, October 19, 2026, but the time slot screen said Tuesday, October 19. I cannot tell which day I actually booked, and I am not sure it matters, but it made me doubt the booking.
-
-### a-jordan-mid (Jordan, mid, desktop, pointer): pass
-runner: Booked a preventive exam with an NP on Mon Oct 19 at 9 AM, reference HC-5201.
-- step 7 shown while loading (2.0s), then replaced: "No appointments available on this date."
-- step 7 runner confusion: I typed 10/19/2026 which I thought was Monday, but the heading says Tuesday, October 19. Which day is it really? I am not sure I can trust it.
-- step 8 dead click: [e47] button "9:00 AM"
-- step 9 field labeled only by placeholder: e63 "MM/DD/YYYY"
-- step 9 control with no accessible name: e65 textbox
-- step 13 acted on an unlabeled control: [e65] textbox ""
-- step 15 runner friction: Mobile phone says only Invalid input. I typed it exactly as I was given, (415) 555-0137. No hint what format it wants. Confusing.
-- step 16 acted on an unlabeled control: [e65] textbox ""
-- step 18 shown while loading (1.1s), then replaced: "Step 4 of 4", "1. Visit type", "2. Date and time"
-
-### a-jordan-mid-n2 (Jordan, mid, desktop, pointer): pass
-runner: Booked preventive exam with NP Monday Oct 19 9:00 AM, ref HC-5201.
-- step 3 runner confusion: Annual Wellness Visit sounds like my yearly physical but mentions Medicare; Preventive exam says routine check-up. Unsure which; picking Preventive exam.
-- step 7 shown while loading (2.0s), then replaced: "No appointments available on this date."
-- step 7 runner confusion: Heading says Tuesday October 19 but I thought Oct 19 2026 was a Monday. Not sure I can trust the day. Going with it as it is a weekday.
-- step 8 dead click: [e47] button "9:00 AM"
-- step 9 field labeled only by placeholder: e63 "MM/DD/YYYY"
-- step 9 control with no accessible name: e65 textbox
-- step 13 acted on an unlabeled control: [e65] textbox ""
-- step 15 runner friction: Mobile phone says only Invalid input. with no hint of the format wanted. I typed it exactly as I was given. Guessing digits only.
-- step 16 acted on an unlabeled control: [e65] textbox ""
-- step 18 shown while loading (1.1s), then replaced: "Step 4 of 4", "1. Visit type", "2. Date and time"
+- step 15 refused click: e69 is not on your screen (it is below what you can see); scroll to it first
+- step 17 runner friction: Phone number rejected with just Invalid input. No hint what format it wants. I typed it exactly as I was given it.
+- step 18 acted on an unlabeled control: [e65] textbox ""
+- step 20 shown while loading (1.1s), then replaced: "Booking..."
 
 ### a-riley-low (Riley, low, desktop, pointer): pass
-runner: Booked a preventive exam with Dana Whitfield NP for Oct 20 at 9:00 AM, reference HC-5201, though the weekday shown changed between steps and the phone field and back button misbehaved.
-- step 5 runner friction: Picked Preventive exam but the red Choose a visit type message is still showing under the field. Not sure if my pick took.
-- step 8 action failed: fill [e43] textbox "Date We're open Monday to Friday.": locator.fill: Error: Malformed value
-- step 8 runner friction: Typed an emoji into the date box and got a Malformed value error with no message on the screen. Expected to be told to pick a date.
+runner: Booked a Preventive exam with Dana Whitfield, NP for Oct 20 2026 at 8:30 AM, confirmation HC-5201, though the weekday shown on screen changed between Wednesday and Tuesday.
+- step 5 runner friction: I picked Preventive exam but the red Choose a visit type message is still showing and the field still says invalid. Not sure if my pick took.
+- step 8 action failed: fill [e43] textbox "Date We're open Monday to Friday.": Malformed value "Test 🧪 émoji 名前" for a date field
 - step 9 shown while loading (2.0s), then replaced: "No appointments available on this date."
-- step 10 dead click: [e49] button "9:00 AM"
-- step 11 shown while loading (2.0s), then replaced: "No appointments available on this date."
-- step 12 dead click: [e70] button "9:00 AM"
-- step 13 field labeled only by placeholder: e91 "MM/DD/YYYY"
-- step 13 control with no accessible name: e93 textbox
-- step 20 acted on an unlabeled control: [e93] textbox ""
-- step 21 acted on an unlabeled control: [e93] textbox ""
-- step 24 shown while loading (2.0s), then replaced: "No appointments available on this date."
-- step 25 field labeled only by placeholder: e126 "MM/DD/YYYY"
-- step 25 control with no accessible name: e128 textbox
-- step 25 runner bug: Went Back from Your details to pick a date, then Continue again, and every field I had typed was empty. Name, birthday, phone, email all gone. Annoying and I dont trust the form to keep my info.
-- step 29 acted on an unlabeled control: [e128] textbox ""
-- step 32 acted on an unlabeled control: [e128] textbox ""
-- step 33 runner friction: Phone field said Invalid input for (415) 555-0137 and also for digits only, but Continue let me through anyway. Review shows it as 4155550137. Unclear what format it actually wants.
-- step 34 shown while loading (1.1s), then replaced: "Step 4 of 4", "1. Visit type", "2. Date and time"
-- step 34 runner bug: Date step said Wednesday, October 20 but the confirmation says Tuesday, October 20. Which day is my appointment on? I cannot tell.
+- step 9 runner confusion: I typed 2026-10-20 and the heading says Wednesday, October 20. I count that as Tuesday. Either the day is wrong or I am miscounting, and I cannot tell which from the screen.
+- step 13 shown while loading (2.0s), then replaced: "No appointments available on this date."
+- step 14 field labeled only by placeholder: e129 "MM/DD/YYYY"
+- step 14 control with no accessible name: e131 textbox
+- step 20 acted on an unlabeled control: [e131] textbox ""
+- step 20 runner friction: The Mobile phone box has no label of its own. The words Mobile phone sit above it as plain text, so I am not sure the box is tied to them. It also took emoji without complaint.
+- step 21 acted on an unlabeled control: [e131] textbox ""
+- step 23 refused click: e135 is not on your screen (it is below what you can see); scroll to it first
+- step 25 runner friction: Continue says 1 field needs attention. The phone box has my number (415) 555-0137 and is marked Invalid input, with no hint of what format it wants. Earlier emoji in that box was accepted, so the rule is unclear.
+- step 26 acted on an unlabeled control: [e131] textbox ""
+- step 28 shown while loading (1.1s), then replaced: "Booking..."
+- step 28 runner bug: The review step said Wednesday, October 20 but the confirmation says Tuesday, October 20, 2026. The booking is confirmed for one date, and I cannot tell which weekday is right. That is a real problem for a patient.
 
 ### a-riley-low-n2 (Riley, low, desktop, pointer): pass
-runner: Booked a Preventive exam with a nurse practitioner for Oct 20 at 9:00 AM, confirmation HC-5201, though the weekday label was inconsistent and mid-flow back and reload wiped the form.
-- step 7 runner friction: I picked Preventive exam and Nurse practitioner, but both fields still show red and say Choose a visit type and Choose who you would like to see. Not sure if my picks registered.
-- step 9 action failed: fill [e43] textbox "Date We're open Monday to Friday.": locator.fill: Error: Malformed value
-- step 10 shown while loading (2.0s), then replaced: "No appointments available on this date."
-- step 10 runner bug: Entered 2026-10-20 and the heading says Wednesday, October 20. October 20 2026 is a Tuesday, so the weekday label looks wrong. I would double check before trusting the day.
-- step 11 dead click: [e49] button "9:00 AM"
-- step 12 field labeled only by placeholder: e65 "MM/DD/YYYY"
-- step 12 control with no accessible name: e67 textbox
-- step 18 acted on an unlabeled control: [e67] textbox ""
-- step 19 acted on an unlabeled control: [e67] textbox ""
-- step 22 field labeled only by placeholder: e89 "MM/DD/YYYY"
-- step 22 control with no accessible name: e91 textbox
-- step 22 runner friction: Went back to the home page with the browser back button, then clicked Book a visit again. It opened on Your details with every field blank, so my visit type, date, time and the details I typed were all gone. I did not expect that.
-- step 24 field labeled only by placeholder: e109 "MM/DD/YYYY"
-- step 24 control with no accessible name: e111 textbox
-- step 24 runner friction: Reloaded the page on the Your details step and every field went blank again. I had to start re-typing, and I am not sure the visit type and time I picked earlier are still held.
-- step 28 acted on an unlabeled control: [e111] textbox ""
-- step 30 runner friction: Mobile phone says only Invalid input for (415) 555-0137. It does not say what format it wants, and the field has no hint. I will try digits only.
-- step 31 acted on an unlabeled control: [e111] textbox ""
-- step 33 shown while loading (1.1s), then replaced: "Step 4 of 4", "1. Visit type", "2. Date and time"
-- step 33 runner bug: Confirmation says Tuesday, October 20, 2026 at 9:00 AM, but the time step and review said Wednesday, October 20. The day name changes between screens, so I cannot tell which is right.
-
-### a-riley-mid (Riley, mid, desktop, pointer): pass
-runner: Booked preventive exam with NP Dana Whitfield, Oct 21 9:00 AM, ref HC-5201.
-- step 6 runner friction: After choosing valid values both fields still show invalid and the error text Choose a visit type until I press Continue. Stale errors are confusing.
-- step 8 action failed: fill [e43] textbox "Date We're open Monday to Friday.": locator.fill: Error: Malformed value
+runner: Booked a preventive exam with a nurse practitioner on Oct 20 at 9:00 AM, confirmation HC-5201, though the weekday shown differs between screens.
+- step 5 runner friction: I picked Preventive exam but the red error Choose a visit type still shows under the field and the box is still marked invalid. Not sure if my pick registered.
+- step 8 action failed: fill [e43] textbox "Date We're open Monday to Friday.": Malformed value "Test 🧪 émoji 名前" for a date field
 - step 9 shown while loading (2.0s), then replaced: "No appointments available on this date."
-- step 9 runner bug: Picked 2026-10-24 which is a Saturday, but heading says Sunday, October 24. Weekday name is wrong or off by one. Closed message is good though.
+- step 9 runner confusion: Entered 2026-10-20 and the heading says Wednesday, October 20. By my count that date is a Tuesday, so either the weekday or the date looks wrong. I cannot tell which to trust.
+- step 12 shown while loading (2.0s), then replaced: "No appointments available on this date."
+- step 13 field labeled only by placeholder: e103 "MM/DD/YYYY"
+- step 13 control with no accessible name: e105 textbox
+- step 19 acted on an unlabeled control: [e105] textbox ""
+- step 20 acted on an unlabeled control: [e105] textbox ""
+- step 22 field labeled only by placeholder: e123 "MM/DD/YYYY"
+- step 22 control with no accessible name: e125 textbox
+- step 22 runner friction: Reloaded the page on the Your details step and every field I typed is blank now. The URL still says book, and the steps above still show as done. Annoying, and I would not trust it to keep my info.
+- step 26 acted on an unlabeled control: [e125] textbox ""
+- step 27 refused click: e129 is not on your screen (it is below what you can see); scroll to it first
+- step 29 runner friction: Mobile phone says only Invalid input after I clicked Continue. It does not say what format it wants. I typed (415) 555-0137 which is a normal US number. Not sure if it is the brackets, the dash or the spaces.
+- step 30 acted on an unlabeled control: [e125] textbox ""
+- step 32 shown while loading (1.1s), then replaced: "Booking..."
+- step 32 runner bug: The review step said Wednesday, October 20 at 9:00 AM, but the confirmation says Tuesday, October 20, 2026. The weekday changes between screens, so I do not know which day I actually booked.
+
+### a-riley-mid (Riley, mid, desktop, pointer): fail
+runner: Phone field rejected three common formats with only Invalid input, so I could not reach Review.
+- step 6 runner friction: After choosing valid values, the red errors Choose a visit type still show and fields still marked invalid until I continue. Confusing.
+- step 8 action failed: fill [e43] textbox "Date We're open Monday to Friday.": Malformed value "Test 🧪 émoji 名前" for a date field
+- step 10 shown while loading (2.0s), then replaced: "No appointments available on this date."
+- step 10 runner bug: Entered 2026-10-24 (a Saturday) and heading says Sunday, October 24. Day name is off by one, I cannot trust the dates shown.
+- step 11 shown while loading (2.0s), then replaced: "No appointments available on this date."
+- step 13 runner friction: Browser Back from step 2 threw me all the way to the home page, not step 1. Steps do not have their own history entries.
+- step 15 field labeled only by placeholder: e93 "MM/DD/YYYY"
+- step 15 control with no accessible name: e95 textbox
+- step 17 refused click: e99 is not on your screen (it is below what you can see); scroll to it first
+- step 19 runner friction: Phone error just says Invalid input. Other fields give examples; this one does not say what format it wants.
+- step 19 refused fill: e90 is not on your screen (it is above what you can see); scroll to it first
+- step 22 acted on an unlabeled control: [e95] textbox ""
+- step 26 field labeled only by placeholder: e117 "MM/DD/YYYY"
+- step 26 control with no accessible name: e119 textbox
+- step 26 runner friction: Reload kept me on step 3 but wiped everything I typed in the form. Had to retype all fields.
+- step 30 acted on an unlabeled control: [e119] textbox ""
+- step 34 acted on an unlabeled control: [e119] textbox ""
+- step 35 runner bug: Phone field rejects both (415) 555-0137 and 415-555-0137 with only Invalid input. No format hint, no placeholder. Blocked on a normal US number.
+- step 36 acted on an unlabeled control: [e119] textbox ""
+
+### a-riley-mid-n2 (Riley, mid, desktop, pointer): pass
+runner: Booked preventive exam with NP Dana Whitfield, Oct 21 9:00 AM, ref HC-5201.
+- step 6 runner friction: After choosing both options the red errors Choose a visit type still show and fields still invalid until I press Continue. Confusing stale errors.
+- step 8 action failed: fill [e43] textbox "Date We're open Monday to Friday.": Malformed value "Test 🧪 émoji 名前" for a date field
+- step 9 shown while loading (2.0s), then replaced: "No appointments available on this date."
+- step 9 runner bug: Heading says Sunday, October 24 but I entered 2026-10-24 which should be a Saturday. Day name looks wrong.
 - step 10 shown while loading (2.0s), then replaced: "No appointments available on this date."
 - step 13 field labeled only by placeholder: e66 "MM/DD/YYYY"
 - step 13 control with no accessible name: e68 textbox
-- step 14 runner friction: Phone field has no visible label of its own and its error just says Invalid input., unlike the other helpful messages. No format hint.
-- step 19 acted on an unlabeled control: [e68] textbox ""
-- step 21 runner friction: Browser Back from step 3 dumped me on the home page, not step 2. Steps are not separate history entries; I feared losing my entries.
-- step 23 field labeled only by placeholder: e95 "MM/DD/YYYY"
-- step 23 control with no accessible name: e97 textbox
-- step 23 runner bug: Returned to Book a visit: still on step 3 but all my typed name, DOB, phone and email were erased. Had to retype everything.
-- step 27 acted on an unlabeled control: [e97] textbox ""
-- step 30 acted on an unlabeled control: [e97] textbox ""
-- step 31 runner friction: Phone (415) 555-0137 rejected with just Invalid input.; plain digits worked on a second try but only after the form re-validated (error was stale). No hint on accepted format.
-- step 32 shown while loading (1.1s), then replaced: "Step 4 of 4", "1. Visit type", "2. Date and time"
-- step 32 runner bug: Confirmation says Wednesday October 21, while earlier steps said Thursday. Inconsistent weekday. Otherwise clear confirmation.
-
-### a-riley-mid-n2 (Riley, mid, desktop, pointer): pass
-runner: Booked preventive exam with NP Dana Whitfield, Mon Oct 26 9:00 AM, ref HC-5201.
-- step 6 runner friction: After choosing both values the red Choose a visit type errors and invalid state stayed on screen until Continue. Felt like I was still wrong.
-- step 8 action failed: fill [e43] textbox "Date We're open Monday to Friday.": locator.fill: Error: Malformed value
-- step 9 shown while loading (2.0s), then replaced: "No appointments available on this date."
-- step 9 runner bug: I typed 2026-10-24 which is a Saturday but the heading says Sunday, October 24. Weekend message correct but the day name is wrong, so I do not trust the dates.
-- step 10 shown while loading (2.0s), then replaced: "No appointments available on this date."
-- step 11 dead click: [e49] button "9:00 AM"
-- step 12 field labeled only by placeholder: e65 "MM/DD/YYYY"
-- step 12 control with no accessible name: e67 textbox
-- step 13 runner friction: Phone error just says Invalid input. while the others say what to enter. Also phone field has no visible label name.
-- step 19 acted on an unlabeled control: [e67] textbox ""
-- step 21 runner bug: My phone (415) 555-0137 was rejected with just Invalid input. No hint of the expected format. Trying digits only.
-- step 22 acted on an unlabeled control: [e67] textbox ""
-- step 23 acted on an unlabeled control: [e67] textbox ""
-- step 25 field labeled only by placeholder: e110 "MM/DD/YYYY"
-- step 25 control with no accessible name: e112 textbox
-- step 25 runner bug: Reloaded on the review step. All my details were wiped and I was dropped back to Your details, with the tab title still saying Review. Had to retype everything.
-- step 29 acted on an unlabeled control: [e112] textbox ""
-- step 32 shown while loading (1.1s), then replaced: "Step 4 of 4", "1. Visit type", "2. Date and time"
-- step 32 runner bug: Confirmation says Monday October 26 but earlier steps said Tuesday October 26. Inconsistent day name.
-
-### a-sam-high (Sam, high, desktop, keyboard): fail
-runner: Keyboard focus is trapped in the time slot buttons, so I could never reach Continue, and picking a time gave no feedback.
-- step 6 runner friction: After choosing Book a visit, my focus stayed on the top navigation link. Nothing announced the new page, I had to tab around to find out I was on step 1.
-- step 10 dead press: [e22] combobox "Type of visit"
-- step 11 runner friction: Arrow keys and Enter did nothing on the visit type dropdown. Only typing a letter changed it. Also Annual Wellness Visit sounded like my yearly physical until I read it is a Medicare thing.
-- step 19 shown while loading (2.0s), then replaced: "No appointments available on this date."
-- step 19 runner bug: I entered Monday 10/19/2026 and the times heading says Tuesday, October 19. Which day is it really? Also while loading it briefly said No appointments available on this date, which almost made me pick another day.
-- step 20 focus without visible ring: textbox "Date We're open Monday to Friday."
-- step 22 dead press: [e46] button "8:30 AM"
-- step 22 runner confusion: Pressed Enter on 8:30 AM and nothing was announced. No selected or pressed state, so I cannot tell if my time is chosen.
-- step 31 runner bug: Tabbing past 3:30 PM sends me back to 8:30 AM. I am stuck circling the time buttons and cannot reach Continue.
-- step 33 dead press: [e47] button "9:00 AM"
-- step 33 runner friction: Tab wraps, Escape does nothing, and Enter or Space on a time is silent. I cannot get out of the time list to Continue, so I cannot book by keyboard. I would have to call the front desk.
-
-### a-sam-high-n2 (Sam, high, desktop, keyboard): fail
-runner: Keyboard focus is trapped in the time slot buttons, both Tab and Shift+Tab wrap inside them, so I could never reach Continue, and nothing ever told me whether 8:30 AM was selected.
-- step 6 runner friction: Pressed Book a visit and the page changed, but my focus stayed on the nav link. Nothing announced the new step, I had to go hunting for where the form starts.
-- step 10 runner confusion: I wanted a yearly physical. Annual Wellness Visit sounded right at first because it says yearly, but its description says Medicare. I am 38, so I picked Preventive exam. I had to stop and reread. Arrow down did nothing in the dropdown, typing a letter worked.
-- step 18 shown while loading (2.0s), then replaced: "No appointments available on this date."
-- step 18 runner bug: I typed October 19 2026, which is a Monday, but the heading reads Tuesday, October 19. Now I am not sure which day I am booking. While it loaded it also said No appointments available on this date before the times appeared, which scared me for a moment. There was no hint about what date format to type either.
-- step 19 focus without visible ring: textbox "Date We're open Monday to Friday."
-- step 21 dead press: [e46] button "8:30 AM"
-- step 21 runner friction: Pressed Enter on 8:30 AM and nothing was announced. The button does not say selected or pressed. I cannot tell if I picked a time.
-- step 22 dead press: [e46] button "8:30 AM"
-- step 30 runner bug: I tabbed through every time and from 3:30 PM focus jumped back to 8:30 AM. I cannot reach the Continue button with Tab. I am trapped in the time list.
-- step 32 runner bug: Shift+Tab also wraps inside the times, and Escape does nothing. I cannot get back to the date or forward to Continue. I would have to call the front desk.
+- step 13 refused click: e72 is not on your screen (it is below what you can see); scroll to it first
+- step 15 runner friction: Phone error just says Invalid input. with no format hint, unlike the other fields and the phone box has no visible label text.
+- step 21 acted on an unlabeled control: [e68] textbox ""
+- step 25 acted on an unlabeled control: [e68] textbox ""
+- step 27 field labeled only by placeholder: e111 "MM/DD/YYYY"
+- step 27 control with no accessible name: e113 textbox
+- step 27 runner bug: Reload on Review page dropped me back to Your details with every field blank, tab title still says Review. Had to retype everything.
+- step 31 acted on an unlabeled control: [e113] textbox ""
+- step 35 shown while loading (1.1s), then replaced: "Booking..."
+- step 35 runner bug: Review said Thursday October 21 but confirmation says Wednesday October 21. Weekday disagrees between screens.
 
 ### a-sam-low (Sam, low, desktop, keyboard): fail
-runner: Got through visit type and clinician, but the date field kept mangling what I typed after three tries, so I could not pick a morning. Giving up.
+runner: Tab cycles only through the time slot buttons on step 2 and never reaches Back or Continue, so I cannot finish booking the Preventive exam with a nurse practitioner.
 - step 10 dead press: [e22] combobox "Type of visit"
-- step 19 js error: Failed to load resource: the server responded with a status of 400 (Bad Request)
-- step 19 network: 400 GET http://127.0.0.1:4792/api/slots?date=61026-02-02&clinician=np
+- step 11 runner friction: Visit type is a combobox. ArrowDown and Space did nothing, no list opened. Typing Preventive finally set it to Preventive exam. I only guessed typing would work; there is no visible list to pick from by keyboard.
+- step 17 refused fill: KEYBOARD_ONLY: this persona cannot fill with a pointer. Use press (Tab, Shift+Tab, Enter, Space, arrows) and type.
 - step 19 shown while loading (2.0s), then replaced: "No appointments available on this date."
-- step 22 js error: Failed to load resource: the server responded with a status of 400 (Bad Request)
-- step 22 js error: Failed to load resource: the server responded with a status of 400 (Bad Request)
-- step 22 js error: Failed to load resource: the server responded with a status of 400 (Bad Request)
-- step 22 js error: Failed to load resource: the server responded with a status of 400 (Bad Request)
-- step 22 network: 400 GET http://127.0.0.1:4792/api/slots?date=20261-02-02&clinician=np
-- step 22 network: 400 GET http://127.0.0.1:4792/api/slots?date=202610-02-02&clinician=np
-- step 22 network: 400 GET http://127.0.0.1:4792/api/slots?date=26102-02-02&clinician=np
-- step 22 network: 400 GET http://127.0.0.1:4792/api/slots?date=261026-02-02&clinician=np
-- step 22 shown while loading (3.3s), then replaced: "No appointments available on this date."
-- step 24 js error: Failed to load resource: the server responded with a status of 400 (Bad Request)
-- step 24 js error: Failed to load resource: the server responded with a status of 400 (Bad Request)
-- step 24 js error: Failed to load resource: the server responded with a status of 400 (Bad Request)
-- step 24 js error: Failed to load resource: the server responded with a status of 400 (Bad Request)
-- step 24 network: 400 GET http://127.0.0.1:4792/api/slots?date=10262-02-02&clinician=np
-- step 24 network: 400 GET http://127.0.0.1:4792/api/slots?date=102620-02-02&clinician=np
-- step 24 network: 400 GET http://127.0.0.1:4792/api/slots?date=26202-02-02&clinician=np
-- step 24 network: 400 GET http://127.0.0.1:4792/api/slots?date=262026-02-02&clinician=np
-- step 24 shown while loading (3.3s), then replaced: "No appointments available on this date."
-- step 24 runner bug: Date field is broken for typing. I typed 2026-10-26 and it became 61026-02-02, then I typed 10/26/2026 and it became 262026-02-02. The heading now says Tuesday, February 2, which I never picked. The field label says open Monday to Friday but gives no date format hint I can hear.
-- step 24 runner friction: On the visit type and clinician dropdowns, Enter and ArrowDown did nothing and no list opened. Only typing a word selected the option. Nothing announced that the list was expanded, so I had to guess that typing works.
-- step 24 runner confusion: The page said No appointments available on this date while loading, then the heading switched to a different day. I cannot tell from the list whether the times are empty or still loading. I have no idea which date I actually have selected.
+- step 20 focus without visible ring: textbox "Date We're open Monday to Friday."
+- step 32 runner bug: Picked 9:00 AM and it shows pressed, but then Tab only cycles through the time buttons. From 3:30 PM it jumps back to 8:30 AM. I never reached Back or Continue. Shift+Tab goes backward through the same times. I cannot find a keyboard way to move on from here.
 
 ### a-sam-low-n2 (Sam, low, desktop, keyboard): fail
-runner: Could not enter a date on the Date and time step; typing into the date box keeps rewriting the value, so I could not pick a weekday morning after three tries.
+runner: Could not enter a date. The Date box garbles typed dates, and Ctrl+A did not clear it, so I gave up after three tries at the same field.
 - step 10 dead press: [e22] combobox "Type of visit"
-- step 17 refused fill: KEYBOARD_ONLY: this persona cannot fill with a pointer. Use press (Tab, Shift+Tab, Enter, Space, arrows) and type.
+- step 11 runner friction: Arrow keys and Enter did nothing on the Type of visit dropdown. Only typing the word Preventive set it, and nothing told me that would work.
 - step 19 js error: Failed to load resource: the server responded with a status of 400 (Bad Request)
 - step 19 network: 400 GET http://127.0.0.1:4792/api/slots?date=61019-02-02&clinician=np
 - step 19 shown while loading (2.0s), then replaced: "No appointments available on this date."
-- step 19 runner friction: I typed 2026-10-19 into the date box and it came out as 61019-02-02. The heading now says Wednesday, February 2 and says no appointments. I have no idea what format this box wants.
-- step 20 js error: Failed to load resource: the server responded with a status of 400 (Bad Request)
-- step 20 js error: Failed to load resource: the server responded with a status of 400 (Bad Request)
-- step 20 js error: Failed to load resource: the server responded with a status of 400 (Bad Request)
-- step 20 js error: Failed to load resource: the server responded with a status of 400 (Bad Request)
-- step 20 js error: Failed to load resource: the server responded with a status of 400 (Bad Request)
-- step 20 js error: Failed to load resource: the server responded with a status of 400 (Bad Request)
-- step 20 js error: Failed to load resource: the server responded with a status of 400 (Bad Request)
-- step 20 js error: Failed to load resource: the server responded with a status of 400 (Bad Request)
-- step 20 network: 400 GET http://127.0.0.1:4792/api/slots?date=275760-02-02&clinician=np
-- step 20 network: 400 GET http://127.0.0.1:4792/api/slots?date=101910-02-02&clinician=np
-- step 20 network: 400 GET http://127.0.0.1:4792/api/slots?date=19101-02-02&clinician=np
-- step 20 network: 400 GET http://127.0.0.1:4792/api/slots?date=191019-02-02&clinician=np
-- step 20 network: 400 GET http://127.0.0.1:4792/api/slots?date=101920-02-02&clinician=np
-- step 20 network: 400 GET http://127.0.0.1:4792/api/slots?date=19202-02-02&clinician=np
-- step 20 network: 400 GET http://127.0.0.1:4792/api/slots?date=192026-02-02&clinician=np
-- step 20 network: 400 GET http://127.0.0.1:4792/api/slots?date=275760-02-02&clinician=np
-- step 20 shown while loading (3.3s), then replaced: "No appointments available on this date."
-- step 22 js error: Failed to load resource: the server responded with a status of 400 (Bad Request)
-- step 22 js error: Failed to load resource: the server responded with a status of 400 (Bad Request)
-- step 22 js error: Failed to load resource: the server responded with a status of 400 (Bad Request)
-- step 22 js error: Failed to load resource: the server responded with a status of 400 (Bad Request)
-- step 22 network: 400 GET http://127.0.0.1:4792/api/slots?date=10192-02-02&clinician=np
-- step 22 network: 400 GET http://127.0.0.1:4792/api/slots?date=101920-02-02&clinician=np
-- step 22 network: 400 GET http://127.0.0.1:4792/api/slots?date=19202-02-02&clinician=np
-- step 22 network: 400 GET http://127.0.0.1:4792/api/slots?date=192026-02-02&clinician=np
-- step 22 shown while loading (3.3s), then replaced: "No appointments available on this date."
-- step 24 shown while loading (2.0s), then replaced: "No appointments available on this date."
-- step 24 runner friction: Three tries at the date box and every time it rewrote what I typed: 10 became 0010-02-02 and 10/19/2026 became 192026-02-02. Backspace clears it but typing never lands on October 19. The page says that date has passed. No date format hint is announced next to the field beyond Monday to Friday. I cannot get a date in.
+- step 21 js error: Failed to load resource: the server responded with a status of 400 (Bad Request)
+- step 21 js error: Failed to load resource: the server responded with a status of 400 (Bad Request)
+- step 21 js error: Failed to load resource: the server responded with a status of 400 (Bad Request)
+- step 21 js error: Failed to load resource: the server responded with a status of 400 (Bad Request)
+- step 21 network: 400 GET http://127.0.0.1:4792/api/slots?date=10192-02-02&clinician=np
+- step 21 network: 400 GET http://127.0.0.1:4792/api/slots?date=101920-02-02&clinician=np
+- step 21 network: 400 GET http://127.0.0.1:4792/api/slots?date=19202-02-02&clinician=np
+- step 21 network: 400 GET http://127.0.0.1:4792/api/slots?date=192026-02-02&clinician=np
+- step 21 shown while loading (3.4s), then replaced: "No appointments available on this date."
+- step 21 runner friction: Typing a date into the Date box garbles it. I typed 2026-10-19 and it became 61019-02-02, then 10/19/2026 became 192026-02-02. The page says Wednesday February 2 and I never picked that. No date format hint was shown.
 
 ### a-sam-mid (Sam, mid, desktop, keyboard): fail
-runner: On the time-selection step, Tab cycles only through the time buttons and never reaches Continue or Back, so I cannot go on.
+runner: Keyboard focus cycles through time slots and never reaches Continue, so I could not proceed past step 2.
 - step 2 refused click: KEYBOARD_ONLY: this persona cannot click with a pointer. Use press (Tab, Shift+Tab, Enter, Space, arrows) and type.
 - step 17 shown while loading (2.0s), then replaced: "No appointments available on this date."
-- step 17 runner confusion: Typed 10/19/2026 and the heading says Tuesday, October 19. I believe that date is a Monday, so the weekday may be wrong. Also the field format was never announced, and it briefly said No appointments available while loading.
+- step 17 runner confusion: Heading says Tuesday October 19 but I typed 10/19/2026 which I thought was a Monday. Confusing; unsure which weekday I am booking. Also date format was not stated, and a No appointments message flashed before times loaded.
 - step 18 focus without visible ring: textbox "Date We're open Monday to Friday."
-- step 20 dead press: [e46] button "8:30 AM"
-- step 20 runner friction: Pressed Enter on 8:30 AM. Nothing was announced, and the button does not say it is selected. I cannot tell if my choice registered.
-- step 29 runner bug: After 3:30 PM, Tab jumped back to 8:30 AM. Back and Continue buttons seem unreachable by keyboard, so I may be stuck.
+- step 29 runner bug: After picking 9:00 AM I tabbed through all the time buttons and focus loops back to 8:30 AM. Back and Continue buttons are never reachable by keyboard. I am stuck and cannot go on to enter my details.
 
 ### a-sam-mid-n2 (Sam, mid, desktop, keyboard): fail
-runner: Could not get from the time slots to Continue by keyboard; Tab loops within the times and no selection is announced.
-- step 2 refused click: KEYBOARD_ONLY: this persona cannot click with a pointer. Use press (Tab, Shift+Tab, Enter, Space, arrows) and type.
-- step 10 dead press: [e22] combobox "Type of visit"
-- step 19 shown while loading (2.0s), then replaced: "No appointments available on this date."
-- step 19 runner confusion: Heading says Tuesday, October 19 but I entered 10/19/2026 which is a Monday. Date mismatch makes me unsure which day I am booking.
-- step 20 focus without visible ring: textbox "Date We're open Monday to Friday."
-- step 22 dead press: [e46] button "8:30 AM"
-- step 22 runner friction: Pressed Enter on 8:30 AM: no announcement or state (no pressed/selected) so I cannot tell if the time was chosen.
-- step 27 dead press: [e47] button "9:00 AM"
-- step 28 runner bug: Tabbing from the last time slot (3:30 PM) jumped back to 8:30 AM; I could not reach Back or Continue. Keyboard trap in the time list.
-- step 29 dead press: [e48] button "9:30 AM"
+runner: Tab wraps within the time slot buttons so I cannot reach Continue by keyboard.
+- step 17 js error: Failed to load resource: the server responded with a status of 400 (Bad Request)
+- step 17 network: 400 GET http://127.0.0.1:4792/api/slots?date=61019-02-02&clinician=np
+- step 17 shown while loading (2.0s), then replaced: "No appointments available on this date."
+- step 17 runner friction: Date field has no format hint. I typed 2026-10-19 and it became year 61019, a garbled date, and the page announced times for February 2 with no warning. Confusing.
+- step 17 refused fill: KEYBOARD_ONLY: this persona cannot fill with a pointer. Use press (Tab, Shift+Tab, Enter, Space, arrows) and type.
+- step 19 js error: Failed to load resource: the server responded with a status of 400 (Bad Request)
+- step 19 js error: Failed to load resource: the server responded with a status of 400 (Bad Request)
+- step 19 js error: Failed to load resource: the server responded with a status of 400 (Bad Request)
+- step 19 js error: Failed to load resource: the server responded with a status of 400 (Bad Request)
+- step 19 network: 400 GET http://127.0.0.1:4792/api/slots?date=61019-02-01&clinician=np
+- step 19 network: 400 GET http://127.0.0.1:4792/api/slots?date=61019-02-10&clinician=np
+- step 19 network: 400 GET http://127.0.0.1:4792/api/slots?date=19202-02-10&clinician=np
+- step 19 network: 400 GET http://127.0.0.1:4792/api/slots?date=192026-02-10&clinician=np
+- step 19 shown while loading (3.4s), then replaced: "No appointments available on this date."
+- step 22 js error: Failed to load resource: the server responded with a status of 400 (Bad Request)
+- step 22 js error: Failed to load resource: the server responded with a status of 400 (Bad Request)
+- step 22 js error: Failed to load resource: the server responded with a status of 400 (Bad Request)
+- step 22 js error: Failed to load resource: the server responded with a status of 400 (Bad Request)
+- step 22 network: 400 GET http://127.0.0.1:4792/api/slots?date=192026-01-10&clinician=np
+- step 22 network: 400 GET http://127.0.0.1:4792/api/slots?date=192026-10-10&clinician=np
+- step 22 network: 400 GET http://127.0.0.1:4792/api/slots?date=192026-10-01&clinician=np
+- step 22 network: 400 GET http://127.0.0.1:4792/api/slots?date=192026-10-19&clinician=np
+- step 22 shown while loading (3.4s), then replaced: "No appointments available on this date."
+- step 22 runner confusion: Heading says Tuesday, October 19 but I thought the 19th was a Monday. Not sure the day name is right. Also the date field announces as a plain textbox with no format.
+- step 23 focus without visible ring: textbox "Date We're open Monday to Friday."
+- step 35 runner bug: Keyboard trap: after choosing a time, Tab cycles through the time buttons and wraps from 3:30 PM back to 8:30 AM. I cannot reach Continue or Back. I am stuck on step 2 of 4.
 
-### b-alex-low (Alex, low, desktop, pointer): pass
-runner: Cancelled follow-up HC-4471 under Morgan Lee; page confirmed Appointment HC-4471 has been cancelled.
+### b-alex-low (Alex, low, desktop, pointer): fail
+runner: Cancel flow showed a Done toast, but the appointment still reads Booked with no cancelled status, so I cannot confirm it was cancelled.
 - step 6 js error: Failed to load resource: the server responded with a status of 404 (Not Found)
 - step 6 network: 404 GET http://127.0.0.1:4792/api/bookings/HC-4471?last=Morgan%20Lee
-- step 6 runner friction: Typed HC-4471 and Morgan Lee, hit Find booking, and got "We couldn not find a booking with that reference and last name." The field says Last name, so maybe it wants just Lee? Not sure what is wrong.
-- step 8 shown while loading (6.2s), then replaced: "We couldn't find a booking with that reference and last name. Check your confirmation email, or call (555) 010-2200."
-- step 8 runner friction: The booking came up after Enter, but the old "couldn not find" error was still on screen while it loaded (6.2s). Unclear whether Lee or Morgan Lee was the fix or it was just slow. Nothing told me which one worked.
+- step 6 runner friction: Entered HC-4471 and Morgan Lee, pressed Enter, and got "We couldnt find a booking with that reference and last name." Field says Last name, so maybe I typed the wrong thing. Not sure what it wants.
 - step 11 dialog: confirm "Keep your appointment on Thursday, November 5, 2026 at 10:00 AM?" (pending)
-- step 11 runner confusion: Confirm box asks "Keep your appointment on Thursday?" I want it gone, so I have to press Cancel to not keep it. Double negative. OK would keep it, which is the opposite of what I want. Worth a second look at the wording.
-- step 12 dialog: confirm "Keep your appointment on Thursday, November 5, 2026 at 10:00 AM?" (dismiss)
-- step 12 shown while loading (6.2s), then replaced: "Appointment HC-4471 Booked", "Patient", "Morgan Lee"
+- step 12 dialog: confirm "Keep your appointment on Thursday, November 5, 2026 at 10:00 AM?" (accept)
+- step 12 shown while loading (6.4s), then replaced: "Done! Your request has been processed."
+- step 12 runner confusion: Said OK on the confirm, and a toast flashed Done! Your request has been processed. But the appointment card still says Booked with the Nov 5 time and both buttons still there. Did it cancel or not? Nothing says Cancelled.
 
 ### b-alex-low-n2 (Alex, low, desktop, pointer): pass
-runner: Cancelled follow-up HC-4471 for Morgan Lee via Manage a booking; page shows Appointment HC-4471 has been cancelled.
-- step 9 dialog: confirm "Keep your appointment on Thursday, November 5, 2026 at 10:00 AM?" (pending)
-- step 9 runner confusion: Asked Keep your appointment on Thursday? with OK and Cancel. I want it gone, so which button cancels it is unclear. Double negative in the prompt wording.
-- step 10 dialog: confirm "Keep your appointment on Thursday, November 5, 2026 at 10:00 AM?" (dismiss)
-- step 10 shown while loading (6.2s), then replaced: "Appointment HC-4471 Booked", "Patient", "Morgan Lee"
+runner: Appointment HC-4471 shows as cancelled with a cancellation email sent.
+- step 6 js error: Failed to load resource: the server responded with a status of 404 (Not Found)
+- step 6 network: 404 GET http://127.0.0.1:4792/api/bookings/HC-4471?last=Morgan%20Lee
+- step 6 runner friction: Typed HC-4471 and Morgan Lee, hit Enter, got told no booking matches that reference and last name. Booking reference was right from my email. Not sure if the name format is the issue.
+- step 7 js error: Failed to load resource: the server responded with a status of 404 (Not Found)
+- step 7 network: 404 GET http://127.0.0.1:4792/api/bookings/HC-4471?last=Morgan%20Lee
+- step 9 runner friction: Full name Morgan Lee failed but just Lee worked. Nobody told me the last name field wants only the surname. Wasted three steps on that.
+- step 12 dialog: confirm "Keep your appointment on Thursday, November 5, 2026 at 10:00 AM?" (pending)
+- step 12 runner confusion: Confirm box asks Keep your appointment on Thursday? and I have no idea which button cancels. I am cancelling, so I will pick Cancel but the wording is backwards.
+- step 13 dialog: confirm "Keep your appointment on Thursday, November 5, 2026 at 10:00 AM?" (dismiss)
 
 ### b-alex-mid (Alex, mid, desktop, pointer): pass
 runner: Appointment HC-4471 cancelled with confirmation shown.
 - step 9 dialog: confirm "Keep your appointment on Thursday, November 5, 2026 at 10:00 AM?" (pending)
-- step 9 runner confusion: Confirm asks Keep your appointment? Inverted wording; OK would mean keep. Had to stop and think. Pressing Cancel to not keep it.
+- step 9 runner confusion: Confirm asks Keep your appointment? after I clicked Continue to cancel. OK/Cancel is backwards and confusing; I guess Cancel means do not keep.
 - step 10 dialog: confirm "Keep your appointment on Thursday, November 5, 2026 at 10:00 AM?" (dismiss)
-- step 10 shown while loading (6.2s), then replaced: "Appointment HC-4471 Booked", "Patient", "Morgan Lee"
 
 ### b-alex-mid-n2 (Alex, mid, desktop, pointer): pass
 runner: Appointment HC-4471 cancelled with confirmation shown.
 - step 9 dialog: confirm "Keep your appointment on Thursday, November 5, 2026 at 10:00 AM?" (pending)
-- step 9 runner confusion: Confirm popup asks Keep your appointment? Answering OK sounds like keeping it. Backwards and confusing wording for a cancel flow.
+- step 9 runner confusion: Confirm asks Keep your appointment? I want to cancel, so OK/Cancel is backwards and confusing. Picking Cancel = do not keep.
 - step 10 dialog: confirm "Keep your appointment on Thursday, November 5, 2026 at 10:00 AM?" (dismiss)
-- step 10 shown while loading (6.2s), then replaced: "Appointment HC-4471 Booked", "Patient", "Morgan Lee"
 
 ### b-jordan-low (Jordan, low, desktop, pointer): pass
-runner: Cancelled Morgan Lee's follow-up HC-4471 via Manage a booking; the page confirmed Appointment HC-4471 has been cancelled.
-- step 8 dead click: [e38] combobox "Reason for cancelling"
+runner: The page says Appointment HC-4471 has been cancelled, with an emailed cancellation notice, so my follow-up with Morgan Lee is cancelled.
+- step 6 js error: Failed to load resource: the server responded with a status of 404 (Not Found)
+- step 6 network: 404 GET http://127.0.0.1:4792/api/bookings/HC-4471?last=Morgan%20Lee
+- step 6 runner friction: I typed the reference HC-4471 and the name Morgan Lee, then Find booking. It says it could not find a booking with that reference and last name. I am not sure if I typed the wrong thing or the booking is wrong. It says check the email or call the front desk.
+- step 8 runner friction: The booking came up after I changed the last name to just Lee. The error had not said the last name was the problem, so I guessed. Found it: Appointment HC-4471, Follow-up visit, Thursday November 5 at 10 AM with Dr Elena Park.
 - step 11 dialog: confirm "Keep your appointment on Thursday, November 5, 2026 at 10:00 AM?" (pending)
-- step 11 runner confusion: I clicked Continue to cancel, and it asks Keep your appointment on Thursday? I want to cancel, not keep it. Which button cancels it? OK sounds like it agrees to keep it, so I am confused about which one to press.
 - step 12 dialog: confirm "Keep your appointment on Thursday, November 5, 2026 at 10:00 AM?" (dismiss)
-- step 12 shown while loading (6.2s), then replaced: "Appointment HC-4471 Booked", "Patient", "Morgan Lee"
+- step 12 runner confusion: The last box asked Keep your appointment on Thursday November 5 at 10 AM? I wanted to cancel, so I had to think about whether OK or Cancel meant cancel. I pressed Cancel because it means I do not keep it. The wording of that question is backwards to me.
 
 ### b-jordan-low-n2 (Jordan, low, desktop, pointer): pass
-runner: Found booking HC-4471 under Morgan Lee, selected Cancel appointment with Schedule conflict as the reason, and got the confirmation that the appointment was cancelled.
-- step 9 dialog: confirm "Keep your appointment on Thursday, November 5, 2026 at 10:00 AM?" (pending)
-- step 10 dialog: confirm "Keep your appointment on Thursday, November 5, 2026 at 10:00 AM?" (dismiss)
-- step 10 shown while loading (6.2s), then replaced: "Appointment HC-4471 Booked", "Patient", "Morgan Lee"
-- step 10 runner confusion: The popup asked Keep your appointment on Thursday November 5 at 10 AM? I had to think about which button meant cancel. Cancel seemed to mean I do not keep it, so I pressed Cancel. It worked but the wording was backwards to me.
+runner: The page says Appointment HC-4471 has been cancelled, so I am done.
+- step 6 js error: Failed to load resource: the server responded with a status of 404 (Not Found)
+- step 6 network: 404 GET http://127.0.0.1:4792/api/bookings/HC-4471?last=Morgan%20Lee
+- step 6 runner confusion: Found booking page. I typed HC-4471 and Morgan Lee into Last name, and got we could not find a booking. The field says Last name, so I am not sure if I should have put only Lee. Confusing.
+- step 10 dead click: [e39] combobox "Reason for cancelling"
+- step 13 dialog: confirm "Keep your appointment on Thursday, November 5, 2026 at 10:00 AM?" (pending)
+- step 14 dialog: confirm "Keep your appointment on Thursday, November 5, 2026 at 10:00 AM?" (dismiss)
+- step 14 runner friction: The Keep your appointment prompt was confusing. I pressed Cancel because I wanted to cancel, and it did cancel. The word Cancel meant the opposite of what I expected, so I had to think about it.
 
 ### b-jordan-mid (Jordan, mid, desktop, pointer): pass
-runner: Appointment HC-4471 shows as cancelled.
+runner: Appointment HC-4471 shown as cancelled.
 - step 9 dialog: confirm "Keep your appointment on Thursday, November 5, 2026 at 10:00 AM?" (pending)
-- step 9 runner confusion: Pressed Continue and got a box asking Keep your appointment? I want to cancel, so OK sounds like keeping it. Confusing wording, I am guessing Cancel means go ahead and cancel.
+- step 9 runner confusion: Asked Keep your appointment? after I chose to cancel. OK/Cancel is backwards and confusing; I guess Cancel means do not keep.
 - step 10 dialog: confirm "Keep your appointment on Thursday, November 5, 2026 at 10:00 AM?" (dismiss)
-- step 10 shown while loading (6.2s), then replaced: "Appointment HC-4471 Booked", "Patient", "Morgan Lee"
 
-### b-jordan-mid-n2 (Jordan, mid, desktop, pointer): pass
-runner: Appointment HC-4471 cancelled; confirmation shown.
+### b-jordan-mid-n2 (Jordan, mid, desktop, pointer): pass-unclaimed
+runner: run ended without done (stop)
 - step 9 dialog: confirm "Keep your appointment on Thursday, November 5, 2026 at 10:00 AM?" (pending)
-- step 9 runner confusion: Dialog asks Keep your appointment? with OK/Cancel. I want to cancel the appointment, so the buttons are backwards and confusing. I will answer Cancel (meaning no, do not keep).
+- step 9 runner confusion: Dialog asks Keep your appointment? with OK/Cancel. I want to cancel the appointment so this is backwards and confusing. Guessing Cancel means no do not keep.
 - step 10 dialog: confirm "Keep your appointment on Thursday, November 5, 2026 at 10:00 AM?" (dismiss)
-- step 10 shown while loading (6.2s), then replaced: "Appointment HC-4471 Booked", "Patient", "Morgan Lee"
 
 ### b-sam-low (Sam, low, desktop, keyboard): pass
-runner: Cancelled appointment HC-4471 for Morgan Lee; the page confirmed it was cancelled and emailed a notice.
+runner: Cancelled follow-up HC-4471 for Morgan Lee with reason Schedule conflict; the page confirmed Appointment HC-4471 has been cancelled.
 - step 15 js error: Failed to load resource: the server responded with a status of 404 (Not Found)
 - step 15 network: 404 GET http://127.0.0.1:4792/api/bookings/HC-4471?last=Morgan%20Lee
-- step 15 runner friction: Typed HC-4471 and Morgan Lee into the fields, pressed Find booking, and got "We couldnt find a booking with that reference and last name." The field is labeled Last name, so I may have typed the wrong thing. Error appeared in an alert, which I heard.
-- step 20 shown while loading (6.2s), then replaced: "We couldn't find a booking with that reference and last name. Check your confirmation email, or call (555) 010-2200."
-- step 20 runner friction: Found it on the second try with Last name = Lee only. The field is labeled Last name and I had typed my full name, and the error did not say which field was wrong. Lost a few steps.
-- step 24 runner friction: Opened Cancel appointment and the dialog appeared, but keyboard focus stayed on the Cancel button behind it. Pressing Tab took me to the Insurance plans link on the page, outside the dialog. I had to hunt for where the dialog was.
-- step 28 dead press: [e39] combobox "Reason for cancelling"
-- step 32 dialog: confirm "Keep your appointment on Thursday, November 5, 2026 at 10:00 AM?" (pending)
-- step 33 dialog: confirm "Keep your appointment on Thursday, November 5, 2026 at 10:00 AM?" (dismiss)
-- step 33 shown while loading (6.2s), then replaced: "Appointment HC-4471 Booked", "Patient", "Morgan Lee"
-- step 33 runner friction: The confirm asked Keep your appointment on Thursday Nov 5? I wanted to cancel, so I pressed Cancel, and it worked. The wording is backwards from what a button labeled Cancel normally means, and I had to think about it. Later the page said Appointment HC-4471 has been cancelled, which is what I needed.
+- step 15 runner friction: I typed HC-4471 and Morgan Lee and pressed Find booking. An alert says no booking matches that reference and last name. Focus dropped to the top of the page, so I had to tab all the way back. I do not know if I mistyped or the booking is not there. Last name field asked only for last name, I entered full name Morgan Lee, maybe that is the problem.
+- step 27 runner friction: Pressed Cancel appointment and a dialog appeared, but keyboard focus stayed on the Cancel button behind it. Tab then jumped to the Insurance plans link at the bottom of the page, outside the dialog. I could not tell the dialog was open except by reading the list. Felt lost.
+- step 34 dialog: confirm "Keep your appointment on Thursday, November 5, 2026 at 10:00 AM?" (pending)
+- step 35 dialog: confirm "Keep your appointment on Thursday, November 5, 2026 at 10:00 AM?" (dismiss)
+- step 35 runner confusion: The final confirm asked Keep your appointment on Thursday November 5 at 10 AM? I wanted to cancel, so I pressed Cancel, which felt backwards. OK would have kept it. The wording is a double negative for someone listening to a screen reader. Would be clearer as Cancel this appointment? with Yes and No.
 
-### b-sam-low-n2 (Sam, low, desktop, keyboard): fail
-runner: Could not get past the Find booking lookup: it rejected HC-4471 with Morgan Lee in the Last name field, and I could not clear that field to try just Lee. I would call the front desk at (555) 010-2200 instead.
-- step 9 runner friction: Pressed Enter on Find my booking and the page changed, but keyboard focus went back to the top of the document instead of the new heading or the first field. I have to tab through the header links again to reach the form.
-- step 18 js error: Failed to load resource: the server responded with a status of 404 (Not Found)
-- step 18 network: 404 GET http://127.0.0.1:4792/api/bookings/HC-4471?last=Morgan%20Lee
-- step 18 runner friction: Find booking said it could not find a booking with that reference and last name. The field is labeled Last name and I typed Morgan Lee, so I may have entered it wrong. I could not clear the field with Backspace or Ctrl+A to fix it.
+### b-sam-low-n2 (Sam, low, desktop, keyboard): pass
+runner: Cancelled appointment HC-4471 for Morgan Lee with reason Schedule conflict; the page confirmed the cancellation.
+- step 13 runner friction: After Find booking, the result loaded but keyboard focus dropped to the page body, so I had to tab from the top to reach the appointment. A screen reader user would expect focus to land on the new Appointment heading or result.
+- step 17 runner friction: The Cancel appointment dialog opened, but keyboard focus did not move into it. Tab took me out to the footer link, and the page scrolled away from the dialog. I had to keep tabbing to find the reason field.
+- step 21 dead press: [e38] combobox "Reason for cancelling"
+- step 25 dialog: confirm "Keep your appointment on Thursday, November 5, 2026 at 10:00 AM?" (pending)
+- step 26 dialog: confirm "Keep your appointment on Thursday, November 5, 2026 at 10:00 AM?" (dismiss)
+- step 26 runner confusion: The confirm asked Keep your appointment on Thursday November 5 at 10 AM? I had to think about which button cancels it. Cancel answered it, and the page then said Appointment HC-4471 has been cancelled. The wording of the question was backwards for me.
+- step 26 runner praise: Once cancelled, the heading and the live region both confirmed Appointment HC-4471 has been cancelled, with a cancellation email. Clear confirmation I could hear.
 
 ### b-sam-mid (Sam, mid, desktop, keyboard): pass
-runner: Appointment HC-4471 cancelled with confirmation message.
+runner: Appointment HC-4471 was cancelled and the page confirmed it.
 - step 2 refused click: KEYBOARD_ONLY: this persona cannot click with a pointer. Use press (Tab, Shift+Tab, Enter, Space, arrows) and type.
-- step 16 focus without visible ring: text "Care close to home Primary care for adults and families on the waterfront. Same-"
-- step 16 runner bug: Skip to content on the Manage page threw me back to the home page instead of skipping to the form. Lost my place.
-- step 28 runner bug: Dialog opened but keyboard focus stayed on the Cancel appointment button behind it. Not moved into the dialog.
-- step 36 dialog: confirm "Keep your appointment on Thursday, November 5, 2026 at 10:00 AM?" (pending)
-- step 36 runner confusion: Confirm asks Keep your appointment? OK/Cancel is backwards and confusing: I want to cancel, so I must press Cancel to not keep it.
-- step 37 dialog: confirm "Keep your appointment on Thursday, November 5, 2026 at 10:00 AM?" (dismiss)
-- step 37 shown while loading (6.2s), then replaced: "Appointment HC-4471 Booked", "Patient", "Morgan Lee"
+- step 12 runner friction: Submitted search with Enter; results appeared below but focus stayed in the Last name field and no announcement. A screen reader user would not know anything happened.
+- step 16 runner friction: Dialog opened but focus stayed on the Cancel appointment button behind it. Unsure where I am; have to Tab to find the dialog.
+- step 24 dialog: confirm "Keep your appointment on Thursday, November 5, 2026 at 10:00 AM?" (pending)
+- step 24 runner confusion: Confirm asks Keep your appointment? with OK/Cancel. Inverted: I want to cancel the appointment, so is Cancel the right button? Double negative, confusing.
+- step 25 dialog: confirm "Keep your appointment on Thursday, November 5, 2026 at 10:00 AM?" (dismiss)
 
 ### b-sam-mid-n2 (Sam, mid, desktop, keyboard): pass
-runner: Appointment HC-4471 cancelled, confirmed on page and live region.
+runner: Appointment HC-4471 cancelled with reason schedule conflict; confirmation shown and announced.
 - step 2 refused click: KEYBOARD_ONLY: this persona cannot click with a pointer. Use press (Tab, Shift+Tab, Enter, Space, arrows) and type.
-- step 16 runner friction: Dialog opened but keyboard focus stayed on the Cancel appointment button behind it; I had to Tab to find the dialog controls.
+- step 12 runner friction: After pressing Enter, results appeared below but focus stayed in the Last name field and nothing announced the result. A screen reader user would not know anything happened.
+- step 17 runner bug: Cancel dialog opened but focus stayed on the page button, and Tab went to the footer link behind the dialog. Dialog does not trap or receive focus; I had to hunt for it.
 - step 24 dialog: confirm "Keep your appointment on Thursday, November 5, 2026 at 10:00 AM?" (pending)
-- step 24 runner confusion: Confirm asks Keep your appointment? so OK might mean keep. I want to cancel, so I pick Cancel on the prompt. Inverted and confusing wording.
+- step 24 runner confusion: Confirm asks Keep your appointment? with OK/Cancel. Inverted: to cancel my appointment I must press Cancel. Very confusing double negative.
 - step 25 dialog: confirm "Keep your appointment on Thursday, November 5, 2026 at 10:00 AM?" (dismiss)
-- step 25 shown while loading (6.2s), then replaced: "Appointment HC-4471 Booked", "Patient", "Morgan Lee"

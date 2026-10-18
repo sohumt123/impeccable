@@ -1,7 +1,9 @@
 // Plays the /impeccable usertest parent for a demo: starts each run's driver,
 // then runs the shipped persona-runner prompt as a locked-down headless Claude:
-// cwd = its own run directory, tools = Bash + Read, Bash allowed only for the
-// driver, no project settings, no MCP. Records each runner's cost.
+// cwd = its own run directory, tools = Bash + Read, Bash allowed only for
+// `impeccable usertest`, Read only under the session directory, no project
+// settings, no MCP. Records each runner's cost. The driver is the engine verb,
+// reached through the skill's launcher (IMPECCABLE_BIN picks the build).
 //
 //   node run-matrix.mjs <matrix.json> <session dir> [--parallel 6]
 import { execFile, spawn } from 'node:child_process';
@@ -10,8 +12,10 @@ import path from 'node:path';
 import { promisify } from 'node:util';
 
 const run = promisify(execFile);
-const REPO = '/Users/sohum/code/impeccable';
-const DRIVER = path.join(REPO, 'skill/scripts/usertest-driver.mjs');
+const REPO = process.env.IMPECCABLE_REPO || process.cwd(); // an impeccable checkout
+const LAUNCHER = path.join(REPO, 'skill/scripts/impeccable');
+const DRIVER = `${LAUNCHER} usertest`;
+const driver = (args, opts = {}) => run(LAUNCHER, ['usertest', ...args], opts);
 const AGENT = fs.readFileSync(path.join(REPO, 'skill/agents/impeccable-persona-runner.md'), 'utf8').replace(/^---[\s\S]*?---\n/, '');
 const MODELS = { low: 'haiku', mid: 'sonnet', high: 'opus' };
 
@@ -53,17 +57,17 @@ async function cell({ goal, persona, tier, name }) {
   if (g.successText) startArgs.push('--success-text', g.successText);
   if (g.successUrl) startArgs.push('--success-url', g.successUrl);
   try {
-    await run(process.execPath, [DRIVER, ...startArgs], { timeout: 120000 });
+    await driver(startArgs, { timeout: 120000 });
   } catch (e) {
     return { name, error: `start failed: ${e.stderr || e.message}` };
   }
-  const packet = [p.card, `Your goal: ${g.text}`, `Driver: node ${DRIVER}`, `Run directory: ${runDir}`].join('\n');
+  const packet = [p.card, `Your goal: ${g.text}`, `Driver: ${DRIVER}`, `Run directory: ${runDir}`].join('\n');
   const args = [
     '-p', packet,
     '--model', MODELS[tier],
     '--system-prompt', AGENT,
     '--tools', 'Bash', 'Read',
-    '--allowedTools', `Bash(node ${DRIVER} *)`, 'Read',
+    '--allowedTools', `Bash(${DRIVER} *)`, `Read(/${session}/**)`,
     '--setting-sources', '',
     '--strict-mcp-config',
     '--no-session-persistence',
@@ -82,8 +86,9 @@ async function cell({ goal, persona, tier, name }) {
   fs.writeFileSync(path.join(session, '_runner', `${name}.json`), out.stdout || out.stderr);
   let result = {};
   try { result = JSON.parse(out.stdout); } catch {}
-  await run(process.execPath, [DRIVER, 'stop', '--run', runDir]).catch(() => {});
-  return { name, code: out.code, seconds: Math.round((Date.now() - t0) / 1000), cost: result.total_cost_usd ?? null, turns: result.num_turns ?? null, reply: String(result.result || out.stderr).slice(0, 600) };
+  await driver(['stop', '--run', runDir]).catch(() => {});
+  const denials = result.permission_denials?.length ?? null;
+  return { name, denials, code: out.code, seconds: Math.round((Date.now() - t0) / 1000), cost: result.total_cost_usd ?? null, turns: result.num_turns ?? null, reply: String(result.result || out.stderr).slice(0, 600) };
 }
 
 const queue = [...cells];
@@ -93,7 +98,7 @@ await Promise.all(Array.from({ length: parallel }, async () => {
     const c = queue.shift();
     const r = await cell(c);
     results.push(r);
-    console.log(`${r.name}: exit ${r.code} · ${r.seconds}s · $${r.cost ?? '?'} · ${r.turns ?? '?'} turns`);
+    console.log(`${r.name}: exit ${r.code} · ${r.seconds}s · $${r.cost ?? '?'} · ${r.turns ?? '?'} turns · ${r.denials ?? '?'} denials`);
   }
 }));
 fs.writeFileSync(path.join(session, '_runner', 'results.json'), JSON.stringify(results, null, 2));
