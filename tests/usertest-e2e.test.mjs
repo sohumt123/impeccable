@@ -172,7 +172,10 @@ describe('impeccable usertest', () => {
     const last = await drive(dir, 'scroll', 'down');
     assert.match(last, /BUDGET_EXHAUSTED/);
     assert.match(await drive(dir, 'scroll', 'down'), /BUDGET_EXHAUSTED/);
-    await drive(dir, 'done', '--outcome', 'abandoned', 'out of budget');
+    // A forgotten flag is still a claim; a malformed done is refused and logged.
+    assert.match(await drive(dir, 'done', 'finished'), /done needs --outcome/);
+    assert.match(await drive(dir, 'done', 'abandoned', 'out of budget'), /recorded: claimed abandoned/);
+    assert.ok(trace(dir).some((s) => s.action === 'refused' && s.verb === 'done'), 'refused done logged');
   });
 
   it('rejects requests without the token or from a browser origin', async (t) => {

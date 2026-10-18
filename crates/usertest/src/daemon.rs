@@ -1458,7 +1458,10 @@ impl Driver {
     /// A person cannot tap, type into, or pick from what is not on their
     /// screen; refused before the step, so it costs no budget.
     fn on_screen(&mut self, r: &str) -> Result<(), String> {
-        match self.js(&format!("(() => {{ const el = utFind({0}); return el ? utOffScreen(el, {0}) : null; }})()", json!(r))) {
+        match self.js(&format!(
+            "(() => {{ const el = utFind({0}); return el ? utOffScreen(el, {0}) : null; }})()",
+            json!(r)
+        )) {
             Ok(v) => match v.get("error").and_then(Value::as_str) {
                 Some(e) => Err(e.to_string()),
                 None => Ok(()),
@@ -1612,8 +1615,15 @@ impl Driver {
                 Ok(format!("noted at step {}", self.step))
             }
             "done" => {
-                let outcome = flags.get("outcome").cloned().unwrap_or_default();
-                if !["completed", "abandoned", "blocked", "unsure"].contains(&outcome.as_str()) {
+                const OUTCOMES: [&str; 4] = ["completed", "abandoned", "blocked", "unsure"];
+                // `done completed <summary>` reads the same as `--outcome completed`:
+                // a runner that forgets the flag still records what it believed.
+                let (outcome, summary) = match flags.get("outcome") {
+                    Some(o) => (o.clone(), rest.clone()),
+                    None if OUTCOMES.contains(&first.as_str()) => (first.clone(), tail.clone()),
+                    None => (String::new(), rest.clone()),
+                };
+                if !OUTCOMES.contains(&outcome.as_str()) {
                     return Err("done needs --outcome completed|abandoned|blocked|unsure".into());
                 }
                 // A confirmation that renders after the last settle still counts.
@@ -1623,7 +1633,7 @@ impl Driver {
                         self.check_goal(&snap);
                     }
                 }
-                self.finish(&outcome, &rest);
+                self.finish(&outcome, &summary);
                 Ok(format!("recorded: claimed {outcome}"))
             }
             other => Err(format!("unknown verb \"{other}\"")),
@@ -1784,7 +1794,8 @@ impl Driver {
             Ok(out) => (200, out, false),
             Err(e) => {
                 let out = format!("ERROR: {}", first_line(&e, 400));
-                if verb != "done" {
+                // After `done` the run is over; later calls are not evidence.
+                if self.done.is_none() {
                     self.append(&json!({ "step": self.step, "action": "refused", "verb": verb, "reason": truncate(&out[7..], 240) }));
                 }
                 (400, out, false)
