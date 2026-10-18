@@ -1,7 +1,7 @@
 // Plays the /impeccable usertest parent for a demo: starts each run's driver,
 // then runs the shipped persona-runner prompt as a locked-down headless Claude:
 // cwd = its own run directory, tools = Bash + Read, Bash allowed only for
-// `impeccable usertest`, Read only under the session directory, no project
+// `impeccable usertest act`, Read only for screenshots in the session, no project
 // settings, no MCP. Records each runner's cost. The driver is the engine verb,
 // reached through the skill's launcher (IMPECCABLE_BIN picks the build).
 //
@@ -14,8 +14,8 @@ import { promisify } from 'node:util';
 const run = promisify(execFile);
 const REPO = process.env.IMPECCABLE_REPO || process.cwd(); // an impeccable checkout
 const LAUNCHER = path.join(REPO, 'skill/scripts/impeccable');
-const DRIVER = `${LAUNCHER} usertest`;
-const driver = (args, opts = {}) => run(LAUNCHER, ['usertest', ...args], opts);
+const DRIVER = `${LAUNCHER} usertest act`;
+const parent = (args, opts = {}) => run(LAUNCHER, ['usertest', ...args], opts);
 const AGENT = fs.readFileSync(path.join(REPO, 'skill/agents/impeccable-persona-runner.md'), 'utf8').replace(/^---[\s\S]*?---\n/, '');
 const MODELS = { low: 'haiku', mid: 'sonnet', high: 'opus' };
 
@@ -57,7 +57,7 @@ async function cell({ goal, persona, tier, name }) {
   if (g.successText) startArgs.push('--success-text', g.successText);
   if (g.successUrl) startArgs.push('--success-url', g.successUrl);
   try {
-    await driver(startArgs, { timeout: 120000 });
+    await parent(startArgs, { timeout: 200000 });
   } catch (e) {
     return { name, error: `start failed: ${e.stderr || e.message}` };
   }
@@ -67,7 +67,7 @@ async function cell({ goal, persona, tier, name }) {
     '--model', MODELS[tier],
     '--system-prompt', AGENT,
     '--tools', 'Bash', 'Read',
-    '--allowedTools', `Bash(${DRIVER} *)`, `Read(/${session}/**)`,
+    '--allowedTools', `Bash(${DRIVER} *)`, `Read(/${session}/**/*.png)`,
     '--setting-sources', '',
     '--strict-mcp-config',
     '--no-session-persistence',
@@ -86,7 +86,7 @@ async function cell({ goal, persona, tier, name }) {
   fs.writeFileSync(path.join(session, '_runner', `${name}.json`), out.stdout || out.stderr);
   let result = {};
   try { result = JSON.parse(out.stdout); } catch {}
-  await driver(['stop', '--run', runDir]).catch(() => {});
+  await parent(['stop', '--run', runDir]).catch(() => {});
   const denials = result.permission_denials?.length ?? null;
   return { name, denials, code: out.code, seconds: Math.round((Date.now() - t0) / 1000), cost: result.total_cost_usd ?? null, turns: result.num_turns ?? null, reply: String(result.result || out.stderr).slice(0, 600) };
 }
